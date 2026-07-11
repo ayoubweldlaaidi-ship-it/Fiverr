@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saber Aballagh - NeoServices Dashboard</title>
+    
+    <!-- Liens pour l'icône de l'application (icon.png) -->
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: #05050e;
+        }
+        .font-cyber {
+            font-family: 'Orbitron', sans-serif;
+        }
+        .neon-border {
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.15), inset 0 0 15px rgba(6, 182, 212, 0.05);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+        .neon-text-cyan {
+            text-shadow: 0 0 10px rgba(6, 182, 212, 0.6);
+        }
+        .neon-text-pink {
+            text-shadow: 0 0 10px rgba(236, 72, 153, 0.6);
+        }
+        .glass-panel {
+            background: rgba(13, 13, 31, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #05050e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #06b6d4;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col justify-between overflow-x-hidden selection:bg-cyan-500 selection:text-black">
+
+    <!-- URGENT NOTIFICATION BAR (Obligatoire) -->
+    <div onclick="openInsuranceAlert()" class="bg-gradient-to-r from-red-600 via-pink-600 to-red-600 text-white text-center py-2.5 px-3 font-cyber text-[10px] xs:text-xs font-bold tracking-wider uppercase cursor-pointer animate-pulse border-b border-red-500/40 flex items-center justify-center gap-2 relative z-50">
+        <i class="fa-solid fa-circle-exclamation text-amber-400 animate-bounce text-xs shrink-0"></i>
+        <span class="truncate">ACTION OBLIGATOIRE : Assurance requise pour activer le contrat Devmem</span>
+        <i class="fa-solid fa-chevron-right text-pink-300 text-[10px] shrink-0"></i>
+    </div>
+
+    <!-- Effets de lumière en arrière-plan -->
+    <div class="absolute top-0 left-1/4 w-72 h-72 bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+    <div class="absolute bottom-10 right-1/4 w-72 h-72 bg-pink-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="glass-panel border-b border-cyan-500/20 sticky top-0 z-40 px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <div class="w-2.5 h-2.5 bg-cyan-400 rounded-full animate-pulse shadow-[0_0_8px_#06b6d4]"></div>
+            <h1 class="font-cyber text-base font-black tracking-widest bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                FIVER_CORE <span class="text-pink-500 text-[10px] font-light">v2.6</span>
+            </h1>
+        </div>
+        
+        <div class="flex items-center gap-3">
+            <div class="text-right hidden xs:block">
+                <p class="font-cyber text-xs font-bold text-slate-300 tracking-wide">Saber Aballagh</p>
+                <p class="text-[9px] text-cyan-400 tracking-wider">PREMIUM</p>
+            </div>
+            <div class="relative group shrink-0">
+                <div class="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-pink-500 rounded-full blur opacity-75 transition duration-300"></div>
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Saber" class="relative w-8 h-8 rounded-full object-cover border border-black">
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-grow p-4 max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-3 gap-5 relative z-10">
+        
+        <!-- LEFT COLUMN -->
+        <div class="lg:col-span-1 flex flex-col gap-5">
+            <!-- SOLDE CARD -->
+            <div class="glass-panel neon-border rounded-xl p-5 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <p class="text-[9px] font-cyber tracking-widest text-cyan-400/70 uppercase">SABER ABALLAGH</p>
+                        <h3 class="text-slate-400 text-xs tracking-wide">SOLDE DISPONIBLE</h3>
+                    </div>
+                    <div class="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center border border-cyan-500/30">
+                        <i class="fa-solid fa-wallet text-cyan-400 text-sm"></i>
+                    </div>
+                </div>
+                <div class="my-2 flex flex-row items-center justify-between gap-2">
+                    <span class="font-cyber text-4xl font-black text-white tracking-tight neon-text-cyan">
+                        0.46 <span class="text-cyan-400 text-xl">$</span>
+                    </span>
+                    <div class="flex gap-1.5">
+                        <button onclick="openWithdrawModal()" class="px-2.5 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-black font-cyber font-bold text-[10px] uppercase tracking-wider rounded transition-all active:scale-95">Retrait</button>
+                        <button onclick="openPayModal()" class="px-2.5 py-1.5 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-cyber font-bold text-[10px] uppercase tracking-wider rounded transition-all active:scale-95">Payer</button>
+                    </div>
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-800/60 flex justify-between text-[10px] tracking-wider text-slate-400">
+                    <span><i class="fa-solid fa-arrow-trend-up text-emerald-400 mr-1"></i> +92.5%</span>
+                    <span class="font-cyber text-slate-500">ID: SA-99X</span>
+                </div>
+            </div>
+
+            <!-- METRICS -->
+            <div class="grid grid-cols-2 gap-3">
+                <div class="glass-panel border border-slate-800 rounded-xl p-3 flex flex-col justify-between">
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider">Demandes Actives</span>
+                    <span class="font-cyber text-xl font-bold text-white mt-1">03</span>
+                </div>
+                <div class="glass-panel border border-slate-800 rounded-xl p-3 flex flex-col justify-between">
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider">Services Livrés</span>
+                    <span class="font-cyber text-xl font-bold text-pink-500 neon-text-pink mt-1">06</span>
+                </div>
+            </div>
+
+            <!-- TABS NAV -->
+            <div class="glass-panel border border-slate-800 rounded-xl p-1.5 grid grid-cols-2 gap-1.5">
+                <button onclick="switchTab('requests')" id="btn-tab-requests" class="py-2 rounded-lg font-cyber text-[11px] uppercase tracking-wider text-slate-400 border border-transparent hover:bg-slate-900/60 transition-all duration-200">
+                    <i class="fa-solid fa-bolt mr-1"></i> Demandes
+                </button>
+                <button onclick="switchTab('contracts')" id="btn-tab-contracts" class="py-2 rounded-lg font-cyber text-[11px] uppercase tracking-wider text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 transition-all duration-200 font-bold">
+                    <i class="fa-solid fa-file-signature mr-1"></i> Contrats
+                </button>
+            </div>
+
+            <!-- HISTORIQUE RETRAIT -->
+            <div class="glass-panel border border-slate-800 rounded-xl p-4 flex flex-col gap-3">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
+                    <div class="flex items-center gap-1.5">
+                        <i class="fa-solid fa-credit-card text-cyan-400 text-[10px]"></i>
+                        <h4 class="font-cyber text-[10px] tracking-widest text-slate-400 font-bold uppercase">Historique Retraits</h4>
+                    </div>
+                </div>
+                <div class="max-h-[140px] overflow-y-auto space-y-2 pr-1">
+                    <div class="flex justify-between items-center bg-slate-950/40 p-2.5 rounded-lg border border-slate-900/60">
+                        <div class="flex flex-col"><span class="text-[10px] text-slate-400 font-cyber">17/06/2026</span><span class="text-[9px] text-slate-500 uppercase">Saber A.</span></div>
+                        <div class="text-right"><span class="font-cyber text-xs font-bold text-pink-500">- 400 $</span></div>
+                    </div>
+                    <div class="flex justify-between items-center bg-slate-950/40 p-2.5 rounded-lg border border-slate-900/60">
+                        <div class="flex flex-col"><span class="text-[10px] text-slate-400 font-cyber">17/06/2026</span><span class="text-[9px] text-slate-500 uppercase">Saber A.</span></div>
+                        <div class="text-right"><span class="font-cyber text-xs font-bold text-pink-500">- 500 $</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="lg:col-span-2 flex flex-col gap-4">
+            
+            <!-- SECTION 1: DEMANDES -->
+            <div id="tab-requests-content" class="space-y-3 hidden">
+                <div class="flex items-center gap-2 mb-1">
+                    <i class="fa-solid fa-bolt text-pink-500 text-xs animate-pulse"></i>
+                    <h2 class="font-cyber text-xs tracking-widest text-slate-300 uppercase font-bold">Flux des Demandes</h2>
+                </div>
+
+                <div class="glass-panel border border-slate-800 rounded-xl p-4 flex flex-col gap-3">
+                    <div class="flex gap-3 items-start">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" alt="Memphis" class="w-10 h-10 rounded-lg object-cover border border-slate-700 shrink-0">
+                        <div class="min-w-0">
+                            <h4 class="font-bold text-white tracking-wide text-sm truncate">Memphis Daku</h4>
+                            <span class="inline-block text-[8px] font-cyber bg-cyan-500/10 text-cyan-400 px-1.5 py-0.5 rounded border border-cyan-500/20 uppercase mt-1">DÉV & MARKETING</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-normal">Poste de Chargé de Développement Web et Marketing numérique chez Devmem.</p>
+                    <div class="flex justify-between items-center pt-2 border-t border-slate-900 mt-1">
+                        <span class="font-cyber text-sm font-bold text-cyan-400">1500 € / m</span>
+                        <button onclick="openTechDiagnostic('memphis')" class="px-3 py-1.5 bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-cyber font-bold text-[10px] rounded shadow active:scale-95">Voir l'offre</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: CONTRATS -->
+            <div id="tab-contracts-content" class="space-y-3">
+                <div class="flex items-center gap-2 mb-1">
+                    <i class="fa-solid fa-file-signature text-cyan-400 text-xs animate-pulse"></i>
+                    <h2 class="font-cyber text-xs tracking-widest text-slate-300 uppercase font-bold">Registre des Engagements</h2>
+                </div>
+
+                <!-- LIGNE DU CONTRAT -->
+                <div class="glass-panel border border-slate-800 rounded-xl p-4 flex flex-col gap-3">
+                    <div onclick="toggleContractDetails()" class="flex items-center justify-between cursor-pointer w-full group">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="w-9 h-9 rounded bg-amber-500/10 flex items-center justify-center border border-amber-500/30 shrink-0 animate-pulse">
+                                <i class="fa-solid fa-clock text-amber-400 text-xs"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <h4 class="font-bold text-white tracking-wide font-cyber text-xs truncate">Offre Memphis Doku</h4>
+                                <p class="text-[9px] font-cyber text-amber-400 uppercase truncate">En attente d'activation (Assurance Obligatoire)</p>
+                            </div>
+                        </div>
+                        <i id="contract-chevron" class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-300 rotate-180 ml-2 shrink-0"></i>
+                    </div>
+
+                    <div id="contract-document-details" class="border-t border-slate-800/80 pt-3 space-y-3 font-sans text-xs text-slate-300">
+                        <div class="bg-slate-950/95 rounded-lg p-3.5 border border-red-500/20 font-mono text-[11px] space-y-4 max-h-[400px] overflow-y-auto">
+                            
+                            <div class="text-center space-y-1 border-b border-slate-800 pb-3">
+                                <h3 class="font-cyber font-bold text-red-400 text-xs">CONTRAT DE TRAVAIL</h3>
+                                <p class="text-[8px] text-slate-500 font-cyber">RÉF : #CONTRAT-DEVMEM-2045</p>
+                                <span class="inline-block text-[8px] bg-red-950/80 text-red-400 border border-red-900/50 px-2 py-0.5 rounded font-cyber mt-1 uppercase">Statut : Suspendu - En attente d'assurance</span>
+                            </div>
+
+                            <div class="space-y-2">
+                                <p class="font-bold text-cyan-500/80 font-cyber text-[10px]">// LES PARTIES :</p>
+                                <div class="flex flex-col gap-2 bg-slate-900/40 p-2.5 rounded border border-slate-800">
+                                    <div>
+                                        <span class="text-slate-500 block text-[8px] font-cyber">L'EMPLOYEUR :</span>
+                                        <span class="text-slate-200 font-bold text-xs">Memphis Daku (Devmem)</span>
+                                        <div class="text-[9px] text-emerald-400 font-cyber"><i class="fa-solid fa-circle-check"></i> Signé (02/07/2026)</div>
+                                    </div>
+                                    <div class="border-t border-slate-800/60 pt-1.5">
+                                        <span class="text-slate-500 block text-[8px] font-cyber">LE SALARIÉ :</span>
+                                        <span class="text-slate-200 font-bold text-xs">Saber Aballagh</span>
+                                        <div class="text-[9px] text-emerald-400 font-cyber"><i class="fa-solid fa-circle-check"></i> Signé (02/07/2026)</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3 text-slate-300 text-[10px] leading-relaxed text-justify">
+                                <div>
+                                    <h5 class="font-cyber font-bold text-pink-500/80 text-[9px] uppercase mb-0.5">ART. 1 : FONCTIONS</h5>
+                                    <p>Chargé de Développement Web et Marketing numérique (Télétravail).</p>
+                                </div>
+                                <div>
+                                    <h5 class="font-cyber font-bold text-pink-500/80 text-[9px] uppercase mb-0.5">ART. 2 : DURÉE</h5>
+                                    <p>3 mois déterminés (15 juillet 2026 au 15 octobre 2026).</p>
+                                </div>
+                                <div>
+                                    <h5 class="font-cyber font-bold text-pink-500/80 text-[9px] uppercase mb-0.5">ART. 3 : REMUNÉRATION</h5>
+                                    <p>Fixe de 1 500 € net mensuel + commission de 20% sur livrables spécifiques validés.</p>
+                                </div>
+                                <div class="bg-red-950/20 p-2 rounded border border-red-900/30">
+                                    <h5 class="font-cyber font-bold text-red-400 text-[9px] uppercase mb-0.5"><i class="fa-solid fa-triangle-exclamation"></i> CLAUSE DU PROTOCOLE SÉCURISÉ</h5>
+                                    <p class="text-slate-400">Conformément aux directives de sécurité des transactions à distance, la souscription à la police d'assurance obligatoire est requise pour libérer le canal d'acompte et valider définitivement la prise de poste.</p>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-slate-800 pt-3 flex flex-col gap-1 text-[8px] font-cyber text-slate-500">
+                                <div>HASH : DEVMEM-2026-SABER</div>
+                                <div class="text-amber-400 font-bold">STATUT : EN ATTENTE DE COUVERTURE OBLIGATOIRE</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL SPECIFIQUE : ASSURANCE COMPLÈTE & OBLIGATOIRE -->
+    <div id="insuranceModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/90 backdrop-blur-sm hidden transition-all duration-300 opacity-0">
+        <div class="glass-panel border-2 border-red-500/80 w-full max-w-md rounded-xl overflow-hidden shadow-2xl">
+            <div class="bg-gradient-to-r from-red-600 via-pink-600 to-red-600 p-2 text-center text-[10px] font-cyber font-bold uppercase tracking-widest text-white animate-pulse">
+                <i class="fa-solid fa-triangle-exclamation mr-1 text-amber-300"></i> SOUSCRIPTION OBLIGATOIRE REQUISE <i class="fa-solid fa-triangle-exclamation ml-1 text-amber-300"></i>
+            </div>
+            <div class="p-4 space-y-3.5">
+                
+                <div class="flex justify-between items-center border-b border-slate-800/80 pb-2">
+                    <div class="flex items-center gap-1.5 text-red-400">
+                        <i class="fa-solid fa-shield-halved text-sm"></i>
+                        <h3 class="font-cyber text-[11px] font-bold tracking-wide uppercase">POLICE D'ASSURANCE OBLIGATOIRE</h3>
+                    </div>
+                    <button onclick="closeInsuranceAlert()" class="text-slate-500 font-cyber text-xs bg-slate-900/80 px-2 py-0.5 rounded border border-slate-800 hover:text-white">[X]</button>
+                </div>
+
+                <div class="text-[11px] space-y-3 max-h-[300px] overflow-y-auto pr-1">
+                    
+                    <div class="bg-red-950/30 p-2.5 rounded border-l-2 border-red-500 text-slate-300 leading-normal text-justify">
+                        Attention <span class="text-white font-bold">Saber Aballagh</span>, cette assurance is a **prérequis légal et obligatoire** pour valider votre activité sur la plateforme avec Devmem. Sans son activation, le contrat reste juridiquement suspendu.
+                    </div>
+
+                    <!-- CLAUSES EXTENSIVE -->
+                    <div class="space-y-2">
+                        
+                        <!-- 1. ASSURANCE MENSUALITÉ -->
+                        <div class="bg-slate-900/50 p-2 rounded border border-slate-800/80">
+                            <div class="flex items-center gap-1.5 text-cyan-400 font-cyber font-bold text-[10px] mb-0.5">
+                                <i class="fa-solid fa-money-check-dollar"></i> 1. ASSURANCE DE MENSUALITÉ (GARANTIE)
+                            </div>
+                            <p class="text-slate-400 leading-relaxed pl-3 text-[10px]">Sécurise à 100% le versement de votre salaire fixe de <span class="text-white font-bold">1 500 € / mois</span>. En cas de défaut de l'employeur, les fonds vous sont versés d'office sous 48h.</p>
+                        </div>
+
+                        <!-- 2. ASSURANCE COMMISSIONS -->
+                        <div class="bg-slate-900/50 p-2 rounded border border-slate-800/80">
+                            <div class="flex items-center gap-1.5 text-cyan-400 font-cyber font-bold text-[10px] mb-0.5">
+                                <i class="fa-solid fa-chart-line"></i> 2. COUVERTURE DES COMMISSIONS
+                            </div>
+                            <p class="text-slate-400 leading-relaxed pl-3 text-[10px]">Garantit la protection et le déblocage automatique de vos <span class="text-white font-bold">20% de commission</span> calculés sur chaque projet livré et validé.</p>
+                        </div>
+
+                        <!-- 3. REPRÉSENTANT JURIDIQUE -->
+                        <div class="bg-slate-900/50 p-2 rounded border border-slate-800/80">
+                            <div class="flex items-center gap-1.5 text-cyan-400 font-cyber font-bold text-[10px] mb-0.5">
+                                <i class="fa-solid fa-gavel"></i> 3. REPRÉSENTANT JURIDIQUE DU SALARIÉ
+                            </div>
+                            <p class="text-slate-400 leading-relaxed pl-3 text-[10px]">Prise en charge intégrale par nos experts d'un représentant légal dédié pour défendre vos droits exclusifs en cas de litige ou rupture abusive du contrat.</p>
+                        </div>
+
+                        <!-- 4. AVANTAGES BONUS EXTENSION -->
+                        <div class="bg-purple-950/20 p-2 rounded border border-purple-900/40">
+                            <div class="flex items-center gap-1.5 text-pink-400 font-cyber font-bold text-[10px] mb-0.5">
+                                <i class="fa-solid fa-plus"></i> 4. BÉNÉFICES ET EXTENSIONS EXCLUSIVES
+                            </div>
+                            <ul class="text-slate-400 leading-relaxed pl-3 text-[10px] list-disc list-inside space-y-0.5">
+                                <li><span class="text-slate-200">Assistance Infrastructure 24/7 :</span> Support Cloud d'urgence pour sécuriser vos codes sources et accès serveurs.</li>
+                                <li><span class="text-slate-200">Garantie Cyber-Matériel :</span> Indemnisation technique allant jusqu'à <span class="text-pink-400">1 500 $</span> en cas de panne de votre ordinateur de travail.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- RECAP FINANCIER -->
+                    <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-900 space-y-1 text-[11px]">
+                        <div class="flex justify-between text-slate-500"><span>Périodicité :</span><span class="text-red-400 font-bold uppercase text-[9px]">Obligatoire / Annuelle (1 seule fois)</span></div>
+                        <div class="flex justify-between text-slate-500 font-cyber uppercase text-[10px]"><span>Date Limite :</span><span class="text-red-500 font-bold animate-pulse">12/07/2026 à 11h00</span></div>
+                        <div class="flex justify-between items-center border-t border-slate-900 pt-1.5 mt-1 font-cyber">
+                            <span class="text-slate-300 font-bold">MONTANT DE LA COTISATION :</span>
+                            <span class="text-xl font-black text-white neon-text-pink">250 $</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ACTIONS BUTTONS -->
+                <div class="grid grid-cols-3 gap-2 pt-1">
+                    <button onclick="closeInsuranceAlert()" class="py-2.5 border border-slate-800 text-slate-500 font-cyber font-bold text-[10px] uppercase rounded active:bg-slate-900">Plus tard</button>
+                    <button onclick="closeInsuranceAlert(); openPayModal();" class="col-span-2 py-2.5 bg-gradient-to-r from-red-600 via-pink-600 to-purple-600 text-white font-cyber font-bold text-[10px] uppercase rounded tracking-widest text-center shadow-[0_0_15px_rgba(239,68,68,0.3)] active:scale-95 transition-all animate-bounce">Régler l'assurance obligatoire</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: RETRAIT -->
+    <div id="withdrawModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/80 backdrop-blur-sm hidden transition-all duration-300 opacity-0">
+        <div class="glass-panel border border-emerald-500/40 w-full max-w-sm rounded-xl overflow-hidden shadow-2xl">
+            <div class="p-4 space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                    <h3 class="font-cyber text-xs font-bold text-white">RETRAIT</h3>
+                    <button onclick="closeWithdrawModal()" class="text-slate-500 text-xs font-mono">[X]</button>
+                </div>
+                <form onsubmit="event.preventDefault(); alert('Retrait initialisé.'); closeWithdrawModal();" class="space-y-3 text-[11px]">
+                    <div><label class="block text-slate-500 mb-0.5 uppercase font-cyber">Titulaire</label><input type="text" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-slate-300" value="SABER ABALLAGH"></div>
+                    <div><label class="block text-slate-500 mb-0.5 uppercase font-cyber">Carte</label><input type="text" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-slate-300" placeholder="•••• •••• •••• ••••"></div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div><label class="block text-slate-500 mb-0.5 uppercase">Exp</label><input type="text" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-slate-300" placeholder="MM/AA"></div>
+                        <div><label class="block text-slate-500 mb-0.5 uppercase">CVC</label><input type="text" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-slate-300" placeholder="•••"></div>
+                    </div>
+                    <div><label class="block text-slate-500 mb-0.5 uppercase">Somme ($)</label><input type="number" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-slate-300" placeholder="0.00"></div>
+                    <button type="submit" class="w-full py-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-black font-cyber font-bold uppercase rounded text-[10px]">Confirmer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: PAYER (OBLIGATOIRE) -->
+    <div id="payModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/80 backdrop-blur-sm hidden transition-all duration-300 opacity-0">
+        <div class="glass-panel border border-red-500/40 w-full max-w-sm rounded-xl overflow-hidden shadow-2xl">
+            <div class="p-4 space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                    <h3 class="font-cyber text-xs font-bold text-white text-red-400">PAIEMENT DE L'ASSURANCE OBLIGATOIRE</h3>
+                    <button onclick="closePayModal()" class="text-slate-500 text-xs font-mono">[X]</button>
+                </div>
+                <form onsubmit="event.preventDefault(); alert('Paiement sécurisé effectué. Activation en cours de votre contrat Devmem...'); closePayModal(); fontActionValide();" class="space-y-3 text-[11px]">
+                    <div><label class="block text-slate-400 mb-0.5 uppercase font-cyber">Libellé Réglementaire</label><input type="text" readonly class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-red-400 font-bold" value="ASSURANCE OBLIGATOIRE - CONTRAT DEVMEM"></div>
+                    <div><label class="block text-slate-400 mb-0.5 uppercase font-cyber">Frais Unique</label><input type="text" readonly class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-white font-cyber font-bold text-sm" value="250.00 $"></div>
+                    <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-red-600 to-pink-600 text-white font-cyber font-bold uppercase rounded text-[10px] tracking-widest shadow-md">Confirmer et Activer le Contrat</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: DIAGNOSTIC -->
+    <div id="cyberModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/80 backdrop-blur-sm hidden transition-all duration-300 opacity-0">
+        <div class="glass-panel border border-cyan-500/40 w-full max-w-sm rounded-xl overflow-hidden shadow-2xl">
+            <div class="p-4 space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                    <h3 id="modalReqRef" class="font-cyber text-xs font-bold text-white">REF: #REQ-2045</h3>
+                    <button onclick="closeTechDiagnostic()" class="text-slate-500 text-xs font-mono">[FERMER]</button>
+                </div>
+                <div class="bg-slate-950/80 p-3 rounded border border-slate-900 text-[11px] text-slate-300 leading-normal">
+                    <p id="modalDescription"></p>
+                </div>
+                <div class="flex justify-between items-center border-t border-slate-900 pt-3">
+                    <div><span class="text-[8px] text-slate-500 block font-cyber">VALEUR</span><span id="modalPrice" class="text-sm font-bold text-cyan-400 font-cyber">1500 € / m</span></div>
+                    <button class="px-3 py-1.5 bg-slate-800 text-slate-500 font-cyber font-bold text-[10px] rounded opacity-50 pointer-events-none">En attente d'activation</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="glass-panel border-t border-slate-900/60 px-4 py-3 text-center text-[9px] text-slate-600 font-cyber tracking-wider">
+        &copy; 2026 SABER CORE SYSTEM // ACCÈS SÉCURISÉ LOG.
+    </footer>
+
+    <!-- INTERACTIVE ENGINE -->
+    <script>
+        function switchTab(tabName) {
+            const reqContent = document.getElementById('tab-requests-content');
+            const contractContent = document.getElementById('tab-contracts-content');
+            const btnRequests = document.getElementById('btn-tab-requests');
+            const btnContracts = document.getElementById('btn-tab-contracts');
+
+            if (tabName === 'requests') {
+                reqContent.classList.remove('hidden');
+                contractContent.classList.add('hidden');
+                btnRequests.className = "py-2 rounded-lg font-cyber text-[11px] uppercase tracking-wider text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 transition-all duration-200 font-bold";
+                btnContracts.className = "py-2 rounded-lg font-cyber text-[11px] uppercase tracking-wider text-slate-400 border border-transparent hover:bg-slate-900/60 transition-all duration-200";
+            } else if (tabName === 'contracts') {
+                reqContent.classList.add('hidden');
+                contractContent.classList.remove('hidden');
+                btnContracts.className = "py-2 rounded-lg font-cyber text-[11px] uppercase tracking-wider text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 transition-all duration-200 font-bold";
+                btnRequests.className = "py-2 rounded-lg font-cyber text-[11px] uppercase tracking-wider text-slate-400 border border-transparent hover:bg-slate-900/60 transition-all duration-200";
+            }
+        }
+
+        function toggleContractDetails() {
+            const details = document.getElementById('contract-document-details');
+            const chevron = document.getElementById('contract-chevron');
+            if (details.classList.contains('hidden')) {
+                details.classList.remove('hidden');
+                chevron.classList.add('rotate-180');
+            } else {
+                details.classList.add('hidden');
+                chevron.classList.remove('rotate-180');
+            }
+        }
+
+        function openInsuranceAlert() {
+            const modal = document.getElementById('insuranceModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+        function closeInsuranceAlert() {
+            const modal = document.getElementById('insuranceModal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+        function openWithdrawModal() {
+            const modal = document.getElementById('withdrawModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+        function closeWithdrawModal() {
+            const modal = document.getElementById('withdrawModal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+        function openPayModal() {
+            const modal = document.getElementById('payModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+        function closePayModal() {
+            const modal = document.getElementById('payModal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+        function openTechDiagnostic(key) {
+            document.getElementById('modalDescription').innerText = "Proposition de collaboration pour le poste de Chargé de Développement Web et Marketing digital chez Devmem. Statut actuel : Suspendu en attente d'assurance obligatoire.";
+            const modal = document.getElementById('cyberModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+        function closeTechDiagnostic() {
+            const modal = document.getElementById('cyberModal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+        
+        function fontActionValide() {
+            console.log("Contrat débloqué");
+        }
+
+        window.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeTechDiagnostic();
+                closeWithdrawModal();
+                closePayModal();
+                closeInsuranceAlert();
+            }
+        });
+    </script>
+</body>
+</html>
