@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saber Aballagh - NeoServices Dashboard</title>
     
-    <!-- Liens pour l'icône de l'application (icon.png) -->
+    <!-- Liens pour l'icône et le Manifeste de l'application -->
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
+    <link rel="manifest" href="manifest.json">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -284,7 +285,7 @@
                 <div class="text-[11px] space-y-3 max-h-[300px] overflow-y-auto pr-1">
                     
                     <div class="bg-red-950/30 p-2.5 rounded border-l-2 border-red-500 text-slate-300 leading-normal text-justify">
-                        Attention <span class="text-white font-bold">Saber Aballagh</span>, cette assurance is a **prérequis légal et obligatoire** pour valider votre activité sur la plateforme avec Devmem. Sans son activation, le contrat reste juridiquement suspendu.
+                        Attention <span class="text-white font-bold">Saber Aballagh</span>, cette assurance est un **prérequis légal et obligatoire** pour valider votre activité sur la plateforme avec Devmem. Sans son activation, le contrat reste juridiquement suspendu.
                     </div>
 
                     <!-- CLAUSES EXTENSIVE -->
@@ -411,6 +412,13 @@
 
     <!-- INTERACTIVE ENGINE -->
     <script>
+        // Enregistrement Automatique du Service Worker pour l'installation Mobile (PWA)
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+            .then(() => console.log("Service Worker enregistré pour l'application."))
+            .catch(err => console.log("Erreur Service Worker :", err));
+        }
+
         function switchTab(tabName) {
             const reqContent = document.getElementById('tab-requests-content');
             const contractContent = document.getElementById('tab-contracts-content');
@@ -499,3 +507,4 @@
     </script>
 </body>
 </html>
+
