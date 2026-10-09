@@ -2,509 +2,706 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saber Aballagh - NeoServices Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Fiverr - Dashboard</title>
     
-    <!-- Liens pour l'icône et le Manifeste de l'application -->
-    <link rel="icon" type="image/png" href="icon.png">
-    <link rel="apple-touch-icon" href="icon.png">
+    <!-- Lien vers le Manifest PWA -->
     <link rel="manifest" href="manifest.json">
-
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- FontAwesome pour les icônes -->
+    <meta name="theme-color" content="#1dbf73">
+    
+    <!-- Polices -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,500&family=Roboto:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-
+    
     <style>
+        :root {
+            --fiverr-green: #1dbf73;
+            --fiverr-dark-green: #0a3a1c;
+            --bg-dark: #1a1b1d;
+            --bg-card: #222222;
+            --text-white: #ffffff;
+            --text-gray: #b5b6ba;
+            --border-color: #333333;
+            --alert-red: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
         body {
-            font-family: 'Rajdhani', sans-serif;
-            background-color: #05050e;
+            background-color: var(--bg-dark);
+            color: var(--text-white);
         }
-        .font-cyber {
-            font-family: 'Orbitron', sans-serif;
+
+        /* --- BARRE DE NAVIGATION --- */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background-color: var(--bg-dark);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        .neon-border {
-            box-shadow: 0 0 15px rgba(6, 182, 212, 0.15), inset 0 0 15px rgba(6, 182, 212, 0.05);
-            border: 1px solid rgba(6, 182, 212, 0.2);
+
+        .menu-icon {
+            font-size: 20px;
+            color: var(--text-gray);
+            cursor: pointer;
         }
-        .neon-text-cyan {
-            text-shadow: 0 0 10px rgba(6, 182, 212, 0.6);
+
+        .logo-fiverr {
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: -1.5px;
         }
-        .neon-text-pink {
-            text-shadow: 0 0 10px rgba(236, 72, 153, 0.6);
+
+        .logo-fiverr span {
+            color: var(--fiverr-green);
+            font-size: 36px;
+            line-height: 0;
+            position: relative;
+            top: 2px;
+            left: -2px;
         }
-        .glass-panel {
-            background: rgba(13, 13, 31, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+
+        .btn-infos {
+            background-color: transparent;
+            color: var(--text-white);
+            border: 1px solid var(--text-gray);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
         }
-        ::-webkit-scrollbar {
-            width: 4px;
+
+        .btn-infos:hover {
+            background-color: var(--fiverr-green);
+            border-color: var(--fiverr-green);
         }
-        ::-webkit-scrollbar-track {
-            background: #05050e;
+
+        /* --- BANNIÈRE DE NOTIFICATION URGENTE --- */
+        .alert-banner {
+            background: linear-gradient(90deg, #991b1b, #7f1d1d);
+            border-left: 5px solid var(--alert-red);
+            padding: 12px 20px;
+            margin: 15px 16px 0 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            animation: pulseAlert 2s infinite;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #06b6d4;
-            border-radius: 3px;
+
+        .alert-banner i {
+            color: #fca5a5;
+            font-size: 1.2rem;
+            margin-right: 10px;
+        }
+
+        @keyframes pulseAlert {
+            0% { opacity: 0.9; }
+            50% { opacity: 1; }
+            100% { opacity: 0.9; }
+        }
+
+        /* --- MENU ONGLETS (TABS) --- */
+        .tabs-container {
+            background-color: var(--bg-dark);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 66px;
+            z-index: 99;
+        }
+
+        .tabs-menu {
+            display: flex;
+            list-style: none;
+            overflow-x: auto;
+            padding: 0 16px;
+            gap: 25px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tabs-menu::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-link {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+            transition: 0.3s;
+        }
+
+        .tab-link:hover {
+            color: var(--text-white);
+        }
+
+        .tab-link.active {
+            color: var(--fiverr-green);
+            border-bottom-color: var(--fiverr-green);
+            font-weight: 600;
+        }
+
+        /* --- SECTION HÉROS --- */
+        .hero-section {
+            background-color: var(--fiverr-dark-green);
+            margin: 20px 16px;
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            line-height: 1.2;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .hero-title .italic-green {
+            color: var(--fiverr-green);
+            font-style: italic;
+            font-weight: 600;
+        }
+
+        /* --- CONTENU DES ONGLETS --- */
+        .main-content {
+            padding: 20px 16px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 60vh;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .header-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-box h3 {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            margin-bottom: 8px;
+        }
+
+        .stat-box .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--fiverr-green);
+        }
+
+        /* --- ONGLET 1 : VUE D'ENSEMBLE --- */
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .app-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            transition: transform 0.2s;
+        }
+        .app-card:hover { border-color: var(--fiverr-green); transform: translateY(-3px); }
+        .app-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+        .app-icon {
+            width: 40px; height: 40px; border-radius: 8px; background: var(--bg-dark);
+            display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+            border: 1px solid var(--border-color);
+        }
+        .app-title h4 { font-size: 1rem; font-weight: 600; }
+        .app-title span { font-size: 0.75rem; color: var(--fiverr-green); }
+        .app-stats {
+            display: flex; justify-content: space-between; padding: 12px 0;
+            border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); margin-bottom: 15px;
+        }
+        .stat-item { text-align: center; }
+        .stat-item .label { font-size: 0.7rem; color: var(--text-gray); }
+        .stat-item .data { font-size: 0.95rem; font-weight: 600; }
+        .btn-view {
+            width: 100%; background: transparent; border: 1px solid var(--fiverr-green);
+            color: var(--fiverr-green); padding: 10px; border-radius: 6px; cursor: pointer;
+            font-weight: 600; transition: 0.3s;
+        }
+        .btn-view:hover { background: var(--fiverr-green); color: white; }
+
+        /* --- ONGLET HÉBERGEMENTS & CHARGES --- */
+        .charges-list { display: flex; flex-direction: column; gap: 15px; }
+        .charge-card {
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 20px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .charge-card.urgent {
+            border-color: var(--alert-red);
+            background: linear-gradient(135deg, rgba(153, 27, 27, 0.15), var(--bg-card));
+        }
+        .charge-info h4 { font-size: 1.05rem; margin-bottom: 5px; }
+        .charge-info p { font-size: 0.85rem; color: var(--text-gray); }
+        .charge-right { text-align: right; }
+        .charge-amount { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+        .badge-paid { background: rgba(29,191,115,0.2); color: var(--fiverr-green); padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+        .badge-unpaid { background: rgba(239, 68, 68, 0.2); color: var(--alert-red); padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+        .btn-pay {
+            background: var(--alert-red); color: white; border: none; padding: 6px 14px;
+            border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.8rem; margin-top: 5px; display: inline-block;
+            transition: 0.2s;
+        }
+        .btn-pay:hover { opacity: 0.9; }
+
+        /* --- AUTRES STYLES --- */
+        .chart-mockup {
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 20px; margin-bottom: 20px; height: 300px;
+            display: flex; align-items: flex-end; justify-content: space-between; gap: 10px;
+        }
+        .bar { flex: 1; background: var(--fiverr-green); border-radius: 4px 4px 0 0; opacity: 0.8; }
+        
+        .finance-card {
+            background: linear-gradient(135deg, var(--fiverr-dark-green), #000);
+            border-radius: 16px; padding: 30px; margin-bottom: 20px; border: 1px solid var(--fiverr-green);
+        }
+        .finance-card h2 { font-size: 1rem; color: var(--text-gray); margin-bottom: 10px; }
+        .finance-card .balance { font-size: 2.5rem; font-weight: 700; color: white; margin-bottom: 20px; }
+        .btn-withdraw {
+            background: rgba(29, 191, 115, 0.5); color: rgba(255, 255, 255, 0.5);
+            border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; cursor: not-allowed;
+        }
+        .transaction-list { background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); }
+        .transaction-item {
+            display: flex; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border-color);
+        }
+        .transaction-item:last-child { border-bottom: none; }
+        .trans-info h4 { font-size: 0.95rem; margin-bottom: 4px; }
+        .trans-info p { font-size: 0.8rem; color: var(--text-gray); }
+        .trans-amount { font-weight: bold; color: var(--fiverr-green); }
+
+        .client-list { display: flex; flex-direction: column; gap: 15px; }
+        .client-card {
+            background: var(--bg-card); border: 1px solid var(--border-color); padding: 15px 20px;
+            border-radius: 12px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .client-avatar { width: 40px; height: 40px; border-radius: 50%; background: #333; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .client-info { flex: 1; margin-left: 15px; }
+        .status-badge { padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+        .status-active { background: rgba(29,191,115,0.2); color: var(--fiverr-green); }
+        .status-done { background: rgba(181, 182, 186, 0.2); color: var(--text-gray); }
+
+        .review-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
+        .review-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 20px; border-radius: 12px; }
+        .stars { color: #f5a623; margin-bottom: 10px; font-size: 0.9rem; }
+        .review-text { font-size: 0.9rem; color: var(--text-gray); line-height: 1.5; margin-bottom: 15px; font-style: italic; }
+        .review-author { font-size: 0.85rem; font-weight: 600; }
+
+        .settings-form { background: var(--bg-card); border-radius: 12px; padding: 25px; border: 1px solid var(--border-color); }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 0.85rem; color: var(--text-gray); }
+        .form-group input { 
+            width: 100%; padding: 12px; background: var(--bg-dark); border: 1px solid var(--border-color);
+            border-radius: 6px; color: white; outline: none;
+        }
+
+        .modal {
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; 
+            background-color: rgba(0,0,0,0.8); backdrop-filter: blur(5px); overflow-y: auto;
+        }
+        .modal-content {
+            background-color: var(--bg-card); margin: 10% auto; padding: 30px; border: 1px solid var(--fiverr-green);
+            border-radius: 12px; width: 90%; max-width: 500px; position: relative;
+        }
+        .close { color: var(--text-gray); position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; }
+        .close:hover { color: white; }
+
+        .payment-card-preview {
+            background: linear-gradient(135deg, #2c3e50, #000000);
+            border: 1px solid #d4af37;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        .payment-card-preview .card-type {
+            font-size: 0.9rem;
+            color: #d4af37;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .payment-card-preview .card-number {
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+        .payment-card-preview .card-holder {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            display: flex;
+            justify-content: space-between;
         }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col justify-between overflow-x-hidden selection:bg-cyan-500 selection:text-black">
+<body>
 
-    <!-- URGENT NOTIFICATION BAR (Obligatoire) -->
-    <div onclick="openInsuranceAlert()" class="bg-gradient-to-r from-red-600 via-pink-600 to-red-600 text-white text-center py-2.5 px-3 font-cyber text-[10px] xs:text-xs font-bold tracking-wider uppercase cursor-pointer animate-pulse border-b border-red-500/40 flex items-center justify-center gap-2 relative z-50">
-        <i class="fa-solid fa-circle-exclamation text-amber-400 animate-bounce text-xs shrink-0"></i>
-        <span class="truncate">ACTION OBLIGATOIRE : Assurance requise pour activer le contrat Devmem</span>
-        <i class="fa-solid fa-chevron-right text-pink-300 text-[10px] shrink-0"></i>
-    </div>
-
-    <!-- Effets de lumière en arrière-plan -->
-    <div class="absolute top-0 left-1/4 w-72 h-72 bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none"></div>
-    <div class="absolute bottom-10 right-1/4 w-72 h-72 bg-pink-500/10 rounded-full blur-[100px] pointer-events-none"></div>
-
-    <!-- HEADER / NAVIGATION -->
-    <header class="glass-panel border-b border-cyan-500/20 sticky top-0 z-40 px-4 py-3 flex justify-between items-center">
-        <div class="flex items-center gap-2">
-            <div class="w-2.5 h-2.5 bg-cyan-400 rounded-full animate-pulse shadow-[0_0_8px_#06b6d4]"></div>
-            <h1 class="font-cyber text-base font-black tracking-widest bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-                FIVER_CORE <span class="text-pink-500 text-[10px] font-light">v2.6</span>
-            </h1>
-        </div>
-        
-        <div class="flex items-center gap-3">
-            <div class="text-right hidden xs:block">
-                <p class="font-cyber text-xs font-bold text-slate-300 tracking-wide">Saber Aballagh</p>
-                <p class="text-[9px] text-cyan-400 tracking-wider">PREMIUM</p>
-            </div>
-            <div class="relative group shrink-0">
-                <div class="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-pink-500 rounded-full blur opacity-75 transition duration-300"></div>
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Saber" class="relative w-8 h-8 rounded-full object-cover border border-black">
-            </div>
-        </div>
+    <!-- Barre de navigation -->
+    <header class="navbar">
+        <i class="fas fa-bars menu-icon"></i>
+        <div class="logo-fiverr">fiverr<span>.</span></div>
+        <button class="btn-infos" id="openModalBtn">Infos Compte</button>
     </header>
 
-    <!-- MAIN CONTAINER -->
-    <main class="flex-grow p-4 max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-3 gap-5 relative z-10">
+    <!-- Notification d'alerte -->
+    <div class="alert-banner">
+        <div style="display: flex; align-items: center;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div>
+                <strong>Alerte de charge :</strong> L'hébergement de TradeLink Connect (349 €) doit être payé avant le <strong>10/10/2026</strong>.
+            </div>
+        </div>
+        <button onclick="document.querySelector('[data-target=\'tab-hosting\']').click()" style="background: white; color: var(--alert-red); border: none; padding: 5px 10px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.8rem; white-space: nowrap; margin-left: 10px;">Voir</button>
+    </div>
+
+    <!-- Menu Onglets -->
+    <div class="tabs-container">
+        <ul class="tabs-menu">
+            <li><a href="#" class="tab-link active" data-target="tab-overview"><i class="fas fa-home"></i> Vue d'ensemble</a></li>
+            <li><a href="#" class="tab-link" data-target="tab-hosting"><i class="fas fa-server"></i> Hébergements & Charges</a></li>
+            <li><a href="#" class="tab-link" data-target="tab-analytics"><i class="fas fa-chart-pie"></i> Analyses & Stats</a></li>
+            <li><a href="#" class="tab-link" data-target="tab-finance"><i class="fas fa-wallet"></i> Finances & Revenus</a></li>
+            <li><a href="#" class="tab-link" data-target="tab-clients"><i class="fas fa-users"></i> Gestion Clients</a></li>
+            <li><a href="#" class="tab-link" data-target="tab-reviews"><i class="fas fa-star"></i> Avis & Retours</a></li>
+            <li><a href="#" class="tab-link" data-target="tab-settings"><i class="fas fa-cog"></i> Paramètres</a></li>
+        </ul>
+    </div>
+
+    <!-- Section Héros -->
+    <div class="hero-section">
+        <h1 class="hero-title">
+            Espace développeur <br>
+            <span class="italic-green">Saber Aballagh</span>
+        </h1>
+    </div>
+
+    <main class="main-content">
         
-        <!-- LEFT COLUMN -->
-        <div class="lg:col-span-1 flex flex-col gap-5">
-            <!-- SOLDE CARD -->
-            <div class="glass-panel neon-border rounded-xl p-5 relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
-                <div class="flex justify-between items-start mb-4">
-                    <div>
-                        <p class="text-[9px] font-cyber tracking-widest text-cyan-400/70 uppercase">SABER ABALLAGH</p>
-                        <h3 class="text-slate-400 text-xs tracking-wide">SOLDE DISPONIBLE</h3>
+        <!-- ONGLET 1 : VUE D'ENSEMBLE -->
+        <div id="tab-overview" class="tab-content active">
+            <div class="header-stats">
+                <div class="stat-box"><h3>Téléchargements</h3><div class="value">142.5K</div></div>
+                <div class="stat-box"><h3>Note Moyenne</h3><div class="value"><i class="fas fa-star" style="font-size:1rem;"></i> 4.9</div></div>
+                <div class="stat-box"><h3>Apps Actives</h3><div class="value">10</div></div>
+            </div>
+            <h2 class="section-title">Portfolio d'Applications</h2>
+            <div class="app-grid">
+                <div class="app-card">
+                    <div class="app-header">
+                        <div class="app-icon" style="color: #f59e0b;"><i class="fas fa-futbol"></i></div>
+                        <div class="app-title"><h4>Tactics Pro Arena</h4><span>App Analyse Sportive</span></div>
                     </div>
-                    <div class="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center border border-cyan-500/30">
-                        <i class="fa-solid fa-wallet text-cyan-400 text-sm"></i>
+                    <div class="app-stats">
+                        <div class="stat-item"><div class="label">Télécharg.</div><div class="data">45.2K</div></div>
+                        <div class="stat-item"><div class="label">Note</div><div class="data"><i class="fas fa-star"></i> 5.0</div></div>
                     </div>
+                    <button class="btn-view" onclick="alert('Détails non inclus dans l\'aperçu global.')">Voir les détails</button>
                 </div>
-                <div class="my-2 flex flex-row items-center justify-between gap-2">
-                    <span class="font-cyber text-4xl font-black text-white tracking-tight neon-text-cyan">
-                        0.46 <span class="text-cyan-400 text-xl">$</span>
-                    </span>
-                    <div class="flex gap-1.5">
-                        <button onclick="openWithdrawModal()" class="px-2.5 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-black font-cyber font-bold text-[10px] uppercase tracking-wider rounded transition-all active:scale-95">Retrait</button>
-                        <button onclick="openPayModal()" class="px-2.5 py-1.5 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-cyber font-bold text-[10px] uppercase tracking-wider rounded transition-all active:scale-95">Payer</button>
+                <div class="app-card">
+                    <div class="app-header">
+                        <div class="app-icon" style="color: #ef4444;"><i class="fas fa-shield-alt"></i></div>
+                        <div class="app-title"><h4>CyberGuard 360</h4><span>Dashboard Sécurité</span></div>
                     </div>
+                    <div class="app-stats">
+                        <div class="stat-item"><div class="label">Installs</div><div class="data">12.4K</div></div>
+                        <div class="stat-item"><div class="label">Note</div><div class="data"><i class="fas fa-star"></i> 4.9</div></div>
+                    </div>
+                    <button class="btn-view" onclick="alert('Détails non inclus dans l\'aperçu global.')">Voir les détails</button>
                 </div>
-                <div class="mt-4 pt-3 border-t border-slate-800/60 flex justify-between text-[10px] tracking-wider text-slate-400">
-                    <span><i class="fa-solid fa-arrow-trend-up text-emerald-400 mr-1"></i> +92.5%</span>
-                    <span class="font-cyber text-slate-500">ID: SA-99X</span>
+                <div class="app-card">
+                    <div class="app-header">
+                        <div class="app-icon" style="color: #3b82f6;"><i class="fas fa-tools"></i></div>
+                        <div class="app-title"><h4>TradeLink Connect</h4><span>Réseau Services Pro</span></div>
+                    </div>
+                    <div class="app-stats">
+                        <div class="stat-item"><div class="label">Users</div><div class="data">28.9K</div></div>
+                        <div class="stat-item"><div class="label">Note</div><div class="data"><i class="fas fa-star"></i> 4.8</div></div>
+                    </div>
+                    <button class="btn-view" onclick="alert('Détails non inclus dans l\'aperçu global.')">Voir les détails</button>
+                </div>
+                <div class="app-card">
+                    <div class="app-header">
+                        <div class="app-icon" style="color: #10b981;"><i class="fas fa-id-card"></i></div>
+                        <div class="app-title"><h4>Scout & Transfer Pro</h4><span>Gestion Carrière Foot</span></div>
+                    </div>
+                    <div class="app-stats">
+                        <div class="stat-item"><div class="label">Licences</div><div class="data">8.1K</div></div>
+                        <div class="stat-item"><div class="label">Note</div><div class="data"><i class="fas fa-star"></i> 5.0</div></div>
+                    </div>
+                    <button class="btn-view" onclick="alert('Détails non inclus dans l\'aperçu global.')">Voir les détails</button>
                 </div>
             </div>
+        </div>
 
-            <!-- METRICS -->
-            <div class="grid grid-cols-2 gap-3">
-                <div class="glass-panel border border-slate-800 rounded-xl p-3 flex flex-col justify-between">
-                    <span class="text-[10px] text-slate-400 uppercase tracking-wider">Demandes Actives</span>
-                    <span class="font-cyber text-xl font-bold text-white mt-1">03</span>
-                </div>
-                <div class="glass-panel border border-slate-800 rounded-xl p-3 flex flex-col justify-between">
-                    <span class="text-[10px] text-slate-400 uppercase tracking-wider">Services Livrés</span>
-                    <span class="font-cyber text-xl font-bold text-pink-500 neon-text-pink mt-1">06</span>
-                </div>
-            </div>
-
-            <!-- TABS NAV -->
-            <div class="glass-panel border border-slate-800 rounded-xl p-1.5 grid grid-cols-2 gap-1.5">
-                <button onclick="switchTab('requests')" id="btn-tab-requests" class="py-2 rounded-lg font-cyber text-[11px] uppercase tracking-wider text-slate-400 border border-transparent hover:bg-slate-900/60 transition-all duration-200">
-                    <i class="fa-solid fa-bolt mr-1"></i> Demandes
-                </button>
-                <button onclick="switchTab('contracts')" id="btn-tab-contracts" class="py-2 rounded-lg font-cyber text-[11px] uppercase tracking-wider text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 transition-all duration-200 font-bold">
-                    <i class="fa-solid fa-file-signature mr-1"></i> Contrats
-                </button>
-            </div>
-
-            <!-- HISTORIQUE RETRAIT -->
-            <div class="glass-panel border border-slate-800 rounded-xl p-4 flex flex-col gap-3">
-                <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
-                    <div class="flex items-center gap-1.5">
-                        <i class="fa-solid fa-credit-card text-cyan-400 text-[10px]"></i>
-                        <h4 class="font-cyber text-[10px] tracking-widest text-slate-400 font-bold uppercase">Historique Retraits</h4>
+        <!-- ONGLET : HÉBERGEMENTS & CHARGES -->
+        <div id="tab-hosting" class="tab-content">
+            <h2 class="section-title"><i class="fas fa-server" style="color: var(--fiverr-green);"></i> Gestion des Hébergements & Templates</h2>
+            <div class="charges-list">
+                <div class="charge-card urgent">
+                    <div class="charge-info">
+                        <h4>Hébergement Trimestriel - TradeLink Connect</h4>
+                        <p>Serveur Cloud VPS & Domaine principal</p>
+                        <p style="color: var(--alert-red); margin-top: 5px; font-weight: bold;"><i class="fas fa-clock"></i> À payer avant le : 10/10/2026</p>
+                    </div>
+                    <div class="charge-right">
+                        <div class="charge-amount" style="color: var(--alert-red);">349,00 €</div>
+                        <span class="badge-unpaid">Non payé</span><br>
+                        <button class="btn-pay" id="openPaymentModalBtn">Payer maintenant</button>
                     </div>
                 </div>
-                <div class="max-h-[140px] overflow-y-auto space-y-2 pr-1">
-                    <div class="flex justify-between items-center bg-slate-950/40 p-2.5 rounded-lg border border-slate-900/60">
-                        <div class="flex flex-col"><span class="text-[10px] text-slate-400 font-cyber">17/06/2026</span><span class="text-[9px] text-slate-500 uppercase">Saber A.</span></div>
-                        <div class="text-right"><span class="font-cyber text-xs font-bold text-pink-500">- 400 $</span></div>
+
+                <div class="charge-card">
+                    <div class="charge-info">
+                        <h4>Hébergement Annuel - MasterScore AI PWA</h4>
+                        <p>Serveur Edge & CDN Cloudflare</p>
+                        <p style="margin-top: 5px; font-size: 0.8rem;">Réglé le 15/01/2026</p>
                     </div>
-                    <div class="flex justify-between items-center bg-slate-950/40 p-2.5 rounded-lg border border-slate-900/60">
-                        <div class="flex flex-col"><span class="text-[10px] text-slate-400 font-cyber">17/06/2026</span><span class="text-[9px] text-slate-500 uppercase">Saber A.</span></div>
-                        <div class="text-right"><span class="font-cyber text-xs font-bold text-pink-500">- 500 $</span></div>
+                    <div class="charge-right">
+                        <div class="charge-amount">180,00 €</div>
+                        <span class="badge-paid">Payé</span>
+                    </div>
+                </div>
+
+                <div class="charge-card">
+                    <div class="charge-info">
+                        <h4>Licence Template UI - Dashboard Admin Pro</h4>
+                        <p>Droits d'utilisation et maintenance structurelle</p>
+                        <p style="margin-top: 5px; font-size: 0.8rem;">Réglé le 02/05/2026</p>
+                    </div>
+                    <div class="charge-right">
+                        <div class="charge-amount">95,00 €</div>
+                        <span class="badge-paid">Payé</span>
+                    </div>
+                </div>
+
+                <div class="charge-card">
+                    <div class="charge-info">
+                        <h4>Hébergement Cloud - Brigade 8</h4>
+                        <p>Serveur de base de données sécurisé</p>
+                        <p style="margin-top: 5px; font-size: 0.8rem;">Réglé le 01/09/2026</p>
+                    </div>
+                    <div class="charge-right">
+                        <div class="charge-amount">120,00 €</div>
+                        <span class="badge-paid">Payé</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- RIGHT COLUMN -->
-        <div class="lg:col-span-2 flex flex-col gap-4">
-            
-            <!-- SECTION 1: DEMANDES -->
-            <div id="tab-requests-content" class="space-y-3 hidden">
-                <div class="flex items-center gap-2 mb-1">
-                    <i class="fa-solid fa-bolt text-pink-500 text-xs animate-pulse"></i>
-                    <h2 class="font-cyber text-xs tracking-widest text-slate-300 uppercase font-bold">Flux des Demandes</h2>
-                </div>
-
-                <div class="glass-panel border border-slate-800 rounded-xl p-4 flex flex-col gap-3">
-                    <div class="flex gap-3 items-start">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" alt="Memphis" class="w-10 h-10 rounded-lg object-cover border border-slate-700 shrink-0">
-                        <div class="min-w-0">
-                            <h4 class="font-bold text-white tracking-wide text-sm truncate">Memphis Daku</h4>
-                            <span class="inline-block text-[8px] font-cyber bg-cyan-500/10 text-cyan-400 px-1.5 py-0.5 rounded border border-cyan-500/20 uppercase mt-1">DÉV & MARKETING</span>
-                        </div>
-                    </div>
-                    <p class="text-xs text-slate-300 leading-normal">Poste de Chargé de Développement Web et Marketing numérique chez Devmem.</p>
-                    <div class="flex justify-between items-center pt-2 border-t border-slate-900 mt-1">
-                        <span class="font-cyber text-sm font-bold text-cyan-400">1500 € / m</span>
-                        <button onclick="openTechDiagnostic('memphis')" class="px-3 py-1.5 bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-cyber font-bold text-[10px] rounded shadow active:scale-95">Voir l'offre</button>
-                    </div>
-                </div>
+        <!-- ONGLET : ANALYSES -->
+        <div id="tab-analytics" class="tab-content">
+            <h2 class="section-title">Performances du compte (6 derniers mois)</h2>
+            <div class="header-stats">
+                <div class="stat-box"><h3>Trafic Profil</h3><div class="value">84,500</div></div>
+                <div class="stat-box"><h3>Taux de Conversion</h3><div class="value">4.2%</div></div>
+                <div class="stat-box"><h3>Commandes Terminées</h3><div class="value">342</div></div>
             </div>
+            <h2 class="section-title">Évolution des ventes</h2>
+            <div class="chart-mockup">
+                <div class="bar" style="height: 30%;"></div>
+                <div class="bar" style="height: 50%;"></div>
+                <div class="bar" style="height: 40%;"></div>
+                <div class="bar" style="height: 70%;"></div>
+                <div class="bar" style="height: 85%;"></div>
+                <div class="bar" style="height: 100%;"></div>
+            </div>
+        </div>
 
-            <!-- SECTION 2: CONTRATS -->
-            <div id="tab-contracts-content" class="space-y-3">
-                <div class="flex items-center gap-2 mb-1">
-                    <i class="fa-solid fa-file-signature text-cyan-400 text-xs animate-pulse"></i>
-                    <h2 class="font-cyber text-xs tracking-widest text-slate-300 uppercase font-bold">Registre des Engagements</h2>
+        <!-- ONGLET : FINANCES -->
+        <div id="tab-finance" class="tab-content">
+            <div class="finance-card">
+                <h2>Solde disponible pour retrait</h2>
+                <div class="balance">0,00 €</div>
+                <button class="btn-withdraw"><i class="fas fa-university"></i> Retirer les fonds</button>
+            </div>
+            <h2 class="section-title">Historique des transactions</h2>
+            <div class="transaction-list">
+                <div class="transaction-item">
+                    <div class="trans-info">
+                        <h4>Retrait vers Carte Saber Aballagh (**0298)</h4>
+                        <p>Traité le 01 Octobre</p>
+                    </div>
+                    <div class="trans-amount" style="color: white;">- 1 200,00 €</div>
                 </div>
-
-                <!-- LIGNE DU CONTRAT -->
-                <div class="glass-panel border border-slate-800 rounded-xl p-4 flex flex-col gap-3">
-                    <div onclick="toggleContractDetails()" class="flex items-center justify-between cursor-pointer w-full group">
-                        <div class="flex items-center gap-3 min-w-0">
-                            <div class="w-9 h-9 rounded bg-amber-500/10 flex items-center justify-center border border-amber-500/30 shrink-0 animate-pulse">
-                                <i class="fa-solid fa-clock text-amber-400 text-xs"></i>
-                            </div>
-                            <div class="min-w-0">
-                                <h4 class="font-bold text-white tracking-wide font-cyber text-xs truncate">Offre Memphis Doku</h4>
-                                <p class="text-[9px] font-cyber text-amber-400 uppercase truncate">En attente d'activation (Assurance Obligatoire)</p>
-                            </div>
-                        </div>
-                        <i id="contract-chevron" class="fa-solid fa-chevron-down text-slate-500 text-[10px] transition-transform duration-300 rotate-180 ml-2 shrink-0"></i>
+                <div class="transaction-item">
+                    <div class="trans-info">
+                        <h4>Commande #FO-4923 - PWA Développement</h4>
+                        <p>Fonds validés - Client: Mark L.</p>
                     </div>
-
-                    <div id="contract-document-details" class="border-t border-slate-800/80 pt-3 space-y-3 font-sans text-xs text-slate-300">
-                        <div class="bg-slate-950/95 rounded-lg p-3.5 border border-red-500/20 font-mono text-[11px] space-y-4 max-h-[400px] overflow-y-auto">
-                            
-                            <div class="text-center space-y-1 border-b border-slate-800 pb-3">
-                                <h3 class="font-cyber font-bold text-red-400 text-xs">CONTRAT DE TRAVAIL</h3>
-                                <p class="text-[8px] text-slate-500 font-cyber">RÉF : #CONTRAT-DEVMEM-2045</p>
-                                <span class="inline-block text-[8px] bg-red-950/80 text-red-400 border border-red-900/50 px-2 py-0.5 rounded font-cyber mt-1 uppercase">Statut : Suspendu - En attente d'assurance</span>
-                            </div>
-
-                            <div class="space-y-2">
-                                <p class="font-bold text-cyan-500/80 font-cyber text-[10px]">// LES PARTIES :</p>
-                                <div class="flex flex-col gap-2 bg-slate-900/40 p-2.5 rounded border border-slate-800">
-                                    <div>
-                                        <span class="text-slate-500 block text-[8px] font-cyber">L'EMPLOYEUR :</span>
-                                        <span class="text-slate-200 font-bold text-xs">Memphis Daku (Devmem)</span>
-                                        <div class="text-[9px] text-emerald-400 font-cyber"><i class="fa-solid fa-circle-check"></i> Signé (02/07/2026)</div>
-                                    </div>
-                                    <div class="border-t border-slate-800/60 pt-1.5">
-                                        <span class="text-slate-500 block text-[8px] font-cyber">LE SALARIÉ :</span>
-                                        <span class="text-slate-200 font-bold text-xs">Saber Aballagh</span>
-                                        <div class="text-[9px] text-emerald-400 font-cyber"><i class="fa-solid fa-circle-check"></i> Signé (02/07/2026)</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="space-y-3 text-slate-300 text-[10px] leading-relaxed text-justify">
-                                <div>
-                                    <h5 class="font-cyber font-bold text-pink-500/80 text-[9px] uppercase mb-0.5">ART. 1 : FONCTIONS</h5>
-                                    <p>Chargé de Développement Web et Marketing numérique (Télétravail).</p>
-                                </div>
-                                <div>
-                                    <h5 class="font-cyber font-bold text-pink-500/80 text-[9px] uppercase mb-0.5">ART. 2 : DURÉE</h5>
-                                    <p>3 mois déterminés (15 juillet 2026 au 15 octobre 2026).</p>
-                                </div>
-                                <div>
-                                    <h5 class="font-cyber font-bold text-pink-500/80 text-[9px] uppercase mb-0.5">ART. 3 : REMUNÉRATION</h5>
-                                    <p>Fixe de 1 500 € net mensuel + commission de 20% sur livrables spécifiques validés.</p>
-                                </div>
-                                <div class="bg-red-950/20 p-2 rounded border border-red-900/30">
-                                    <h5 class="font-cyber font-bold text-red-400 text-[9px] uppercase mb-0.5"><i class="fa-solid fa-triangle-exclamation"></i> CLAUSE DU PROTOCOLE SÉCURISÉ</h5>
-                                    <p class="text-slate-400">Conformément aux directives de sécurité des transactions à distance, la souscription à la police d'assurance obligatoire est requise pour libérer le canal d'acompte et valider définitivement la prise de poste.</p>
-                                </div>
-                            </div>
-
-                            <div class="border-t border-slate-800 pt-3 flex flex-col gap-1 text-[8px] font-cyber text-slate-500">
-                                <div>HASH : DEVMEM-2026-SABER</div>
-                                <div class="text-amber-400 font-bold">STATUT : EN ATTENTE DE COUVERTURE OBLIGATOIRE</div>
-                            </div>
-                        </div>
+                    <div class="trans-amount">+ 450,00 €</div>
+                </div>
+                <div class="transaction-item">
+                    <div class="trans-info">
+                        <h4>Retrait vers Carte Saber Aballagh (**0298)</h4>
+                        <p>Traité le 01 Septembre</p>
                     </div>
+                    <div class="trans-amount" style="color: white;">- 2 450,00 €</div>
                 </div>
             </div>
         </div>
+
+        <!-- ONGLET : CLIENTS -->
+        <div id="tab-clients" class="tab-content">
+            <h2 class="section-title">Commandes en cours</h2>
+            <div class="client-list">
+                <div class="client-card">
+                    <div class="client-avatar">EL</div>
+                    <div class="client-info">
+                        <h4 style="margin-bottom: 5px;">Emma Lawson</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-gray);">Application de livraison de repas</p>
+                    </div>
+                    <div class="status-badge status-active">En révision (J-2)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ONGLET : AVIS -->
+        <div id="tab-reviews" class="tab-content">
+            <div class="header-stats" style="margin-bottom: 20px;">
+                <div class="stat-box" style="padding: 10px;"><h3>Note Vendeur</h3><div class="value" style="font-size: 1.2rem;">4.9 / 5</div></div>
+                <div class="stat-box" style="padding: 10px;"><h3>Avis Totaux</h3><div class="value" style="font-size: 1.2rem;">1,284</div></div>
+            </div>
+            <div class="review-grid">
+                <div class="review-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="review-text">"Saber est un développeur exceptionnel. Dashboard livré avant la deadline."</p>
+                    <div class="review-author">- Thomas B. (France)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ONGLET : PARAMÈTRES -->
+        <div id="tab-settings" class="tab-content">
+            <h2 class="section-title">Paramètres du compte Fiverr</h2>
+            <div class="settings-form">
+                <div class="form-group"><label>Nom du Développeur</label><input type="text" value="Saber Aballagh" readonly></div>
+                <div class="form-group"><label>Nom de l'Application</label><input type="text" value="Fiverr" readonly></div>
+            </div>
+        </div>
+
     </main>
 
-    <!-- MODAL SPECIFIQUE : ASSURANCE COMPLÈTE & OBLIGATOIRE -->
-    <div id="insuranceModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/90 backdrop-blur-sm hidden transition-all duration-300 opacity-0">
-        <div class="glass-panel border-2 border-red-500/80 w-full max-w-md rounded-xl overflow-hidden shadow-2xl">
-            <div class="bg-gradient-to-r from-red-600 via-pink-600 to-red-600 p-2 text-center text-[10px] font-cyber font-bold uppercase tracking-widest text-white animate-pulse">
-                <i class="fa-solid fa-triangle-exclamation mr-1 text-amber-300"></i> SOUSCRIPTION OBLIGATOIRE REQUISE <i class="fa-solid fa-triangle-exclamation ml-1 text-amber-300"></i>
+    <!-- Modale Infos Compte -->
+    <div id="infoModal" class="modal">
+        <div class="modal-content border-green" style="border-color: var(--fiverr-green);">
+            <span class="close" id="closeModalBtn">&times;</span>
+            <h2 style="text-align: center; color: var(--fiverr-green); font-family: 'Playfair Display', serif; margin-bottom: 20px;">Informations du Compte</h2>
+            <div style="background: var(--bg-dark); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border-color);">
+                <label style="font-size: 0.8rem; color: var(--text-gray); display: block; margin-bottom: 5px;">Application</label>
+                <p style="font-size: 1.1rem; font-weight: 600; color: white;"><i class="fas fa-store" style="color: var(--fiverr-green); margin-right: 8px;"></i> Fiverr</p>
             </div>
-            <div class="p-4 space-y-3.5">
-                
-                <div class="flex justify-between items-center border-b border-slate-800/80 pb-2">
-                    <div class="flex items-center gap-1.5 text-red-400">
-                        <i class="fa-solid fa-shield-halved text-sm"></i>
-                        <h3 class="font-cyber text-[11px] font-bold tracking-wide uppercase">POLICE D'ASSURANCE OBLIGATOIRE</h3>
-                    </div>
-                    <button onclick="closeInsuranceAlert()" class="text-slate-500 font-cyber text-xs bg-slate-900/80 px-2 py-0.5 rounded border border-slate-800 hover:text-white">[X]</button>
-                </div>
-
-                <div class="text-[11px] space-y-3 max-h-[300px] overflow-y-auto pr-1">
-                    
-                    <div class="bg-red-950/30 p-2.5 rounded border-l-2 border-red-500 text-slate-300 leading-normal text-justify">
-                        Attention <span class="text-white font-bold">Saber Aballagh</span>, cette assurance est un **prérequis légal et obligatoire** pour valider votre activité sur la plateforme avec Devmem. Sans son activation, le contrat reste juridiquement suspendu.
-                    </div>
-
-                    <!-- CLAUSES EXTENSIVE -->
-                    <div class="space-y-2">
-                        
-                        <!-- 1. ASSURANCE MENSUALITÉ -->
-                        <div class="bg-slate-900/50 p-2 rounded border border-slate-800/80">
-                            <div class="flex items-center gap-1.5 text-cyan-400 font-cyber font-bold text-[10px] mb-0.5">
-                                <i class="fa-solid fa-money-check-dollar"></i> 1. ASSURANCE DE MENSUALITÉ (GARANTIE)
-                            </div>
-                            <p class="text-slate-400 leading-relaxed pl-3 text-[10px]">Sécurise à 100% le versement de votre salaire fixe de <span class="text-white font-bold">1 500 € / mois</span>. En cas de défaut de l'employeur, les fonds vous sont versés d'office sous 48h.</p>
-                        </div>
-
-                        <!-- 2. ASSURANCE COMMISSIONS -->
-                        <div class="bg-slate-900/50 p-2 rounded border border-slate-800/80">
-                            <div class="flex items-center gap-1.5 text-cyan-400 font-cyber font-bold text-[10px] mb-0.5">
-                                <i class="fa-solid fa-chart-line"></i> 2. COUVERTURE DES COMMISSIONS
-                            </div>
-                            <p class="text-slate-400 leading-relaxed pl-3 text-[10px]">Garantit la protection et le déblocage automatique de vos <span class="text-white font-bold">20% de commission</span> calculés sur chaque projet livré et validé.</p>
-                        </div>
-
-                        <!-- 3. REPRÉSENTANT JURIDIQUE -->
-                        <div class="bg-slate-900/50 p-2 rounded border border-slate-800/80">
-                            <div class="flex items-center gap-1.5 text-cyan-400 font-cyber font-bold text-[10px] mb-0.5">
-                                <i class="fa-solid fa-gavel"></i> 3. REPRÉSENTANT JURIDIQUE DU SALARIÉ
-                            </div>
-                            <p class="text-slate-400 leading-relaxed pl-3 text-[10px]">Prise en charge intégrale par nos experts d'un représentant légal dédié pour défendre vos droits exclusifs en cas de litige ou rupture abusive du contrat.</p>
-                        </div>
-
-                        <!-- 4. AVANTAGES BONUS EXTENSION -->
-                        <div class="bg-purple-950/20 p-2 rounded border border-purple-900/40">
-                            <div class="flex items-center gap-1.5 text-pink-400 font-cyber font-bold text-[10px] mb-0.5">
-                                <i class="fa-solid fa-plus"></i> 4. BÉNÉFICES ET EXTENSIONS EXCLUSIVES
-                            </div>
-                            <ul class="text-slate-400 leading-relaxed pl-3 text-[10px] list-disc list-inside space-y-0.5">
-                                <li><span class="text-slate-200">Assistance Infrastructure 24/7 :</span> Support Cloud d'urgence pour sécuriser vos codes sources et accès serveurs.</li>
-                                <li><span class="text-slate-200">Garantie Cyber-Matériel :</span> Indemnisation technique allant jusqu'à <span class="text-pink-400">1 500 $</span> en cas de panne de votre ordinateur de travail.</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- RECAP FINANCIER -->
-                    <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-900 space-y-1 text-[11px]">
-                        <div class="flex justify-between text-slate-500"><span>Périodicité :</span><span class="text-red-400 font-bold uppercase text-[9px]">Obligatoire / Annuelle (1 seule fois)</span></div>
-                        <div class="flex justify-between text-slate-500 font-cyber uppercase text-[10px]"><span>Date Limite :</span><span class="text-red-500 font-bold animate-pulse">12/07/2026 à 11h00</span></div>
-                        <div class="flex justify-between items-center border-t border-slate-900 pt-1.5 mt-1 font-cyber">
-                            <span class="text-slate-300 font-bold">MONTANT DE LA COTISATION :</span>
-                            <span class="text-xl font-black text-white neon-text-pink">250 $</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ACTIONS BUTTONS -->
-                <div class="grid grid-cols-3 gap-2 pt-1">
-                    <button onclick="closeInsuranceAlert()" class="py-2.5 border border-slate-800 text-slate-500 font-cyber font-bold text-[10px] uppercase rounded active:bg-slate-900">Plus tard</button>
-                    <button onclick="closeInsuranceAlert(); openPayModal();" class="col-span-2 py-2.5 bg-gradient-to-r from-red-600 via-pink-600 to-purple-600 text-white font-cyber font-bold text-[10px] uppercase rounded tracking-widest text-center shadow-[0_0_15px_rgba(239,68,68,0.3)] active:scale-95 transition-all animate-bounce">Régler l'assurance obligatoire</button>
-                </div>
+            <div style="background: var(--bg-dark); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border-color);">
+                <label style="font-size: 0.8rem; color: var(--text-gray); display: block; margin-bottom: 5px;">Développeur Principal</label>
+                <p style="font-size: 1.1rem; font-weight: 600; color: white;"><i class="fas fa-code" style="color: var(--fiverr-green); margin-right: 8px;"></i> Saber Aballagh</p>
             </div>
         </div>
     </div>
 
-    <!-- MODAL: RETRAIT -->
-    <div id="withdrawModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/80 backdrop-blur-sm hidden transition-all duration-300 opacity-0">
-        <div class="glass-panel border border-emerald-500/40 w-full max-w-sm rounded-xl overflow-hidden shadow-2xl">
-            <div class="p-4 space-y-4">
-                <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                    <h3 class="font-cyber text-xs font-bold text-white">RETRAIT</h3>
-                    <button onclick="closeWithdrawModal()" class="text-slate-500 text-xs font-mono">[X]</button>
-                </div>
-                <form onsubmit="event.preventDefault(); alert('Retrait initialisé.'); closeWithdrawModal();" class="space-y-3 text-[11px]">
-                    <div><label class="block text-slate-500 mb-0.5 uppercase font-cyber">Titulaire</label><input type="text" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-slate-300" value="SABER ABALLAGH"></div>
-                    <div><label class="block text-slate-500 mb-0.5 uppercase font-cyber">Carte</label><input type="text" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-slate-300" placeholder="•••• •••• •••• ••••"></div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div><label class="block text-slate-500 mb-0.5 uppercase">Exp</label><input type="text" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-slate-300" placeholder="MM/AA"></div>
-                        <div><label class="block text-slate-500 mb-0.5 uppercase">CVC</label><input type="text" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-slate-300" placeholder="•••"></div>
-                    </div>
-                    <div><label class="block text-slate-500 mb-0.5 uppercase">Somme ($)</label><input type="number" class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-slate-300" placeholder="0.00"></div>
-                    <button type="submit" class="w-full py-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-black font-cyber font-bold uppercase rounded text-[10px]">Confirmer</button>
-                </form>
+    <!-- Modale de Paiement -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content" style="border-color: #d4af37;">
+            <span class="close" id="closePaymentModalBtn">&times;</span>
+            <h2 style="text-align: center; color: #d4af37; font-family: 'Playfair Display', serif; margin-bottom: 15px;">Paiement Sécurisé</h2>
+            <p style="font-size: 0.85rem; color: var(--text-gray); text-align: center; margin-bottom: 20px;">Règlement de l'hébergement TradeLink Connect (349,00 €)</p>
+            <div class="payment-card-preview">
+                <div class="card-type"><span>Mastercard Titanium</span><i class="fab fa-cc-mastercard" style="font-size: 1.5rem; color: #eb001b;"></i></div>
+                <div class="card-number">•••• •••• •••• 3490</div>
+                <div class="card-holder"><span>Saber Aballagh</span><span>EXP: 06/27</span></div>
             </div>
+            <button onclick="alert('Paiement de 349 € effectué avec succès via la carte Mastercard Titanium (**3490).'); document.getElementById('paymentModal').style.display='none';" style="width: 100%; background: var(--fiverr-green); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px;">Confirmer le paiement de 349 €</button>
         </div>
     </div>
 
-    <!-- MODAL: PAYER (OBLIGATOIRE) -->
-    <div id="payModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/80 backdrop-blur-sm hidden transition-all duration-300 opacity-0">
-        <div class="glass-panel border border-red-500/40 w-full max-w-sm rounded-xl overflow-hidden shadow-2xl">
-            <div class="p-4 space-y-4">
-                <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                    <h3 class="font-cyber text-xs font-bold text-white text-red-400">PAIEMENT DE L'ASSURANCE OBLIGATOIRE</h3>
-                    <button onclick="closePayModal()" class="text-slate-500 text-xs font-mono">[X]</button>
-                </div>
-                <form onsubmit="event.preventDefault(); alert('Paiement sécurisé effectué. Activation en cours de votre contrat Devmem...'); closePayModal(); fontActionValide();" class="space-y-3 text-[11px]">
-                    <div><label class="block text-slate-400 mb-0.5 uppercase font-cyber">Libellé Réglementaire</label><input type="text" readonly class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-red-400 font-bold" value="ASSURANCE OBLIGATOIRE - CONTRAT DEVMEM"></div>
-                    <div><label class="block text-slate-400 mb-0.5 uppercase font-cyber">Frais Unique</label><input type="text" readonly class="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-white font-cyber font-bold text-sm" value="250.00 $"></div>
-                    <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-red-600 to-pink-600 text-white font-cyber font-bold uppercase rounded text-[10px] tracking-widest shadow-md">Confirmer et Activer le Contrat</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL: DIAGNOSTIC -->
-    <div id="cyberModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/80 backdrop-blur-sm hidden transition-all duration-300 opacity-0">
-        <div class="glass-panel border border-cyan-500/40 w-full max-w-sm rounded-xl overflow-hidden shadow-2xl">
-            <div class="p-4 space-y-4">
-                <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                    <h3 id="modalReqRef" class="font-cyber text-xs font-bold text-white">REF: #REQ-2045</h3>
-                    <button onclick="closeTechDiagnostic()" class="text-slate-500 text-xs font-mono">[FERMER]</button>
-                </div>
-                <div class="bg-slate-950/80 p-3 rounded border border-slate-900 text-[11px] text-slate-300 leading-normal">
-                    <p id="modalDescription"></p>
-                </div>
-                <div class="flex justify-between items-center border-t border-slate-900 pt-3">
-                    <div><span class="text-[8px] text-slate-500 block font-cyber">VALEUR</span><span id="modalPrice" class="text-sm font-bold text-cyan-400 font-cyber">1500 € / m</span></div>
-                    <button class="px-3 py-1.5 bg-slate-800 text-slate-500 font-cyber font-bold text-[10px] rounded opacity-50 pointer-events-none">En attente d'activation</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- FOOTER -->
-    <footer class="glass-panel border-t border-slate-900/60 px-4 py-3 text-center text-[9px] text-slate-600 font-cyber tracking-wider">
-        &copy; 2026 SABER CORE SYSTEM // ACCÈS SÉCURISÉ LOG.
-    </footer>
-
-    <!-- INTERACTIVE ENGINE -->
+    <!-- Scripts -->
     <script>
-        // Enregistrement Automatique du Service Worker pour l'installation Mobile (PWA)
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-            .then(() => console.log("Service Worker enregistré pour l'application."))
-            .catch(err => console.log("Erreur Service Worker :", err));
-        }
+        const tabLinks = document.querySelectorAll(".tab-link");
+        const tabContents = document.querySelectorAll(".tab-content");
 
-        function switchTab(tabName) {
-            const reqContent = document.getElementById('tab-requests-content');
-            const contractContent = document.getElementById('tab-contracts-content');
-            const btnRequests = document.getElementById('btn-tab-requests');
-            const btnContracts = document.getElementById('btn-tab-contracts');
-
-            if (tabName === 'requests') {
-                reqContent.classList.remove('hidden');
-                contractContent.classList.add('hidden');
-                btnRequests.className = "py-2 rounded-lg font-cyber text-[11px] uppercase tracking-wider text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 transition-all duration-200 font-bold";
-                btnContracts.className = "py-2 rounded-lg font-cyber text-[11px] uppercase tracking-wider text-slate-400 border border-transparent hover:bg-slate-900/60 transition-all duration-200";
-            } else if (tabName === 'contracts') {
-                reqContent.classList.add('hidden');
-                contractContent.classList.remove('hidden');
-                btnContracts.className = "py-2 rounded-lg font-cyber text-[11px] uppercase tracking-wider text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 transition-all duration-200 font-bold";
-                btnRequests.className = "py-2 rounded-lg font-cyber text-[11px] uppercase tracking-wider text-slate-400 border border-transparent hover:bg-slate-900/60 transition-all duration-200";
-            }
-        }
-
-        function toggleContractDetails() {
-            const details = document.getElementById('contract-document-details');
-            const chevron = document.getElementById('contract-chevron');
-            if (details.classList.contains('hidden')) {
-                details.classList.remove('hidden');
-                chevron.classList.add('rotate-180');
-            } else {
-                details.classList.add('hidden');
-                chevron.classList.remove('rotate-180');
-            }
-        }
-
-        function openInsuranceAlert() {
-            const modal = document.getElementById('insuranceModal');
-            modal.classList.remove('hidden');
-            setTimeout(() => modal.classList.remove('opacity-0'), 10);
-        }
-        function closeInsuranceAlert() {
-            const modal = document.getElementById('insuranceModal');
-            modal.classList.add('opacity-0');
-            setTimeout(() => modal.classList.add('hidden'), 300);
-        }
-        function openWithdrawModal() {
-            const modal = document.getElementById('withdrawModal');
-            modal.classList.remove('hidden');
-            setTimeout(() => modal.classList.remove('opacity-0'), 10);
-        }
-        function closeWithdrawModal() {
-            const modal = document.getElementById('withdrawModal');
-            modal.classList.add('opacity-0');
-            setTimeout(() => modal.classList.add('hidden'), 300);
-        }
-        function openPayModal() {
-            const modal = document.getElementById('payModal');
-            modal.classList.remove('hidden');
-            setTimeout(() => modal.classList.remove('opacity-0'), 10);
-        }
-        function closePayModal() {
-            const modal = document.getElementById('payModal');
-            modal.classList.add('opacity-0');
-            setTimeout(() => modal.classList.add('hidden'), 300);
-        }
-        function openTechDiagnostic(key) {
-            document.getElementById('modalDescription').innerText = "Proposition de collaboration pour le poste de Chargé de Développement Web et Marketing digital chez Devmem. Statut actuel : Suspendu en attente d'assurance obligatoire.";
-            const modal = document.getElementById('cyberModal');
-            modal.classList.remove('hidden');
-            setTimeout(() => modal.classList.remove('opacity-0'), 10);
-        }
-        function closeTechDiagnostic() {
-            const modal = document.getElementById('cyberModal');
-            modal.classList.add('opacity-0');
-            setTimeout(() => modal.classList.add('hidden'), 300);
-        }
-        
-        function fontActionValide() {
-            console.log("Contrat débloqué");
-        }
-
-        window.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeTechDiagnostic();
-                closeWithdrawModal();
-                closePayModal();
-                closeInsuranceAlert();
-            }
+        tabLinks.forEach(link => {
+            link.addEventListener("click", function(e) {
+                e.preventDefault(); 
+                tabLinks.forEach(t => t.classList.remove("active"));
+                tabContents.forEach(c => c.classList.remove("active"));
+                this.classList.add("active");
+                document.getElementById(this.getAttribute("data-target")).classList.add("active");
+                window.scrollTo({ top: 150, behavior: 'smooth' });
+            });
         });
+
+        const infoModal = document.getElementById("infoModal");
+        document.getElementById("openModalBtn").onclick = () => infoModal.style.display = "block";
+        document.getElementById("closeModalBtn").onclick = () => infoModal.style.display = "none";
+
+        const paymentModal = document.getElementById("paymentModal");
+        document.getElementById("openPaymentModalBtn").onclick = () => paymentModal.style.display = "block";
+        document.getElementById("closePaymentModalBtn").onclick = () => paymentModal.style.display = "none";
+
+        window.onclick = (e) => {
+            if (e.target == infoModal) infoModal.style.display = "none";
+            if (e.target == paymentModal) paymentModal.style.display = "none";
+        };
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('Service Worker enregistré !', reg))
+                .catch(err => console.log('Erreur Service Worker :', err));
+            });
+        }
     </script>
 </body>
 </html>
-
