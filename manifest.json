@@ -1,14 +1,13 @@
 {
-  "name": "Fiverr Core",
+  "name": "Fiverr Dashboard",
   "short_name": "Fiverr",
-  "start_url": "index.html",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#05050e",
-  "theme_color": "#06b6d4",
-  "orientation": "portrait",
+  "background_color": "#1a1b1d",
+  "theme_color": "#1dbf73",
   "icons": [
     {
-      "src": "icon.png",
+      "src": "icon27.png",
       "sizes": "512x512",
       "type": "image/png"
     }
