@@ -3,11 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fiverr - Dashboard</title>
-    
-    <!-- Lien vers le Manifest PWA -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1dbf73">
+    <title>Fiverr Portfolio - Memphis Doku</title>
     
     <!-- Polices -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,500&family=Roboto:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -85,32 +81,6 @@
         .btn-infos:hover {
             background-color: var(--fiverr-green);
             border-color: var(--fiverr-green);
-        }
-
-        /* --- BANNIÈRE DE NOTIFICATION URGENTE --- */
-        .alert-banner {
-            background: linear-gradient(90deg, #991b1b, #7f1d1d);
-            border-left: 5px solid var(--alert-red);
-            padding: 12px 20px;
-            margin: 15px 16px 0 16px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 0.9rem;
-            animation: pulseAlert 2s infinite;
-        }
-
-        .alert-banner i {
-            color: #fca5a5;
-            font-size: 1.2rem;
-            margin-right: 10px;
-        }
-
-        @keyframes pulseAlert {
-            0% { opacity: 0.9; }
-            50% { opacity: 1; }
-            100% { opacity: 0.9; }
         }
 
         /* --- MENU ONGLETS (TABS) --- */
@@ -278,24 +248,13 @@
             background: var(--bg-card); border: 1px solid var(--border-color);
             border-radius: 12px; padding: 20px; display: flex; justify-content: space-between; align-items: center;
         }
-        .charge-card.urgent {
-            border-color: var(--alert-red);
-            background: linear-gradient(135deg, rgba(153, 27, 27, 0.15), var(--bg-card));
-        }
         .charge-info h4 { font-size: 1.05rem; margin-bottom: 5px; }
         .charge-info p { font-size: 0.85rem; color: var(--text-gray); }
         .charge-right { text-align: right; }
         .charge-amount { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
         .badge-paid { background: rgba(29,191,115,0.2); color: var(--fiverr-green); padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
-        .badge-unpaid { background: rgba(239, 68, 68, 0.2); color: var(--alert-red); padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
-        .btn-pay {
-            background: var(--alert-red); color: white; border: none; padding: 6px 14px;
-            border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.8rem; margin-top: 5px; display: inline-block;
-            transition: 0.2s;
-        }
-        .btn-pay:hover { opacity: 0.9; }
 
-        /* --- AUTRES STYLES --- */
+        /* --- AUTRES ONGLETS STYLES --- */
         .chart-mockup {
             background: var(--bg-card); border: 1px solid var(--border-color);
             border-radius: 12px; padding: 20px; margin-bottom: 20px; height: 300px;
@@ -331,7 +290,6 @@
         .client-info { flex: 1; margin-left: 15px; }
         .status-badge { padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
         .status-active { background: rgba(29,191,115,0.2); color: var(--fiverr-green); }
-        .status-done { background: rgba(181, 182, 186, 0.2); color: var(--text-gray); }
 
         .review-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
         .review-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 20px; border-radius: 12px; }
@@ -347,6 +305,7 @@
             border-radius: 6px; color: white; outline: none;
         }
 
+        /* --- MODALES --- */
         .modal {
             display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; 
             background-color: rgba(0,0,0,0.8); backdrop-filter: blur(5px); overflow-y: auto;
@@ -357,35 +316,6 @@
         }
         .close { color: var(--text-gray); position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; }
         .close:hover { color: white; }
-
-        .payment-card-preview {
-            background: linear-gradient(135deg, #2c3e50, #000000);
-            border: 1px solid #d4af37;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 15px 0;
-            color: white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        }
-        .payment-card-preview .card-type {
-            font-size: 0.9rem;
-            color: #d4af37;
-            font-weight: bold;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .payment-card-preview .card-number {
-            font-size: 1.2rem;
-            letter-spacing: 2px;
-            margin-bottom: 15px;
-        }
-        .payment-card-preview .card-holder {
-            font-size: 0.85rem;
-            color: var(--text-gray);
-            display: flex;
-            justify-content: space-between;
-        }
     </style>
 </head>
 <body>
@@ -396,17 +326,6 @@
         <div class="logo-fiverr">fiverr<span>.</span></div>
         <button class="btn-infos" id="openModalBtn">Infos Compte</button>
     </header>
-
-    <!-- Notification d'alerte -->
-    <div class="alert-banner">
-        <div style="display: flex; align-items: center;">
-            <i class="fas fa-exclamation-triangle"></i>
-            <div>
-                <strong>Alerte de charge :</strong> L'hébergement de TradeLink Connect (349 €) doit être payé avant le <strong>10/10/2026</strong>.
-            </div>
-        </div>
-        <button onclick="document.querySelector('[data-target=\'tab-hosting\']').click()" style="background: white; color: var(--alert-red); border: none; padding: 5px 10px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.8rem; white-space: nowrap; margin-left: 10px;">Voir</button>
-    </div>
 
     <!-- Menu Onglets -->
     <div class="tabs-container">
@@ -491,19 +410,20 @@
         <div id="tab-hosting" class="tab-content">
             <h2 class="section-title"><i class="fas fa-server" style="color: var(--fiverr-green);"></i> Gestion des Hébergements & Templates</h2>
             <div class="charges-list">
-                <div class="charge-card urgent">
+                <!-- Charge Payée (TradeLink Connect) -->
+                <div class="charge-card">
                     <div class="charge-info">
                         <h4>Hébergement Trimestriel - TradeLink Connect</h4>
                         <p>Serveur Cloud VPS & Domaine principal</p>
-                        <p style="color: var(--alert-red); margin-top: 5px; font-weight: bold;"><i class="fas fa-clock"></i> À payer avant le : 10/10/2026</p>
+                        <p style="margin-top: 5px; font-size: 0.8rem;">Réglé le 10/10/2026 par Carte Bancaire</p>
                     </div>
                     <div class="charge-right">
-                        <div class="charge-amount" style="color: var(--alert-red);">349,00 €</div>
-                        <span class="badge-unpaid">Non payé</span><br>
-                        <button class="btn-pay" id="openPaymentModalBtn">Payer maintenant</button>
+                        <div class="charge-amount">349,00 €</div>
+                        <span class="badge-paid">Payé</span>
                     </div>
                 </div>
 
+                <!-- Charges Déjà Payées -->
                 <div class="charge-card">
                     <div class="charge-info">
                         <h4>Hébergement Annuel - MasterScore AI PWA</h4>
@@ -542,7 +462,7 @@
             </div>
         </div>
 
-        <!-- ONGLET : ANALYSES -->
+        <!-- ONGLET : ANALYSES & STATS -->
         <div id="tab-analytics" class="tab-content">
             <h2 class="section-title">Performances du compte (6 derniers mois)</h2>
             <div class="header-stats">
@@ -550,6 +470,7 @@
                 <div class="stat-box"><h3>Taux de Conversion</h3><div class="value">4.2%</div></div>
                 <div class="stat-box"><h3>Commandes Terminées</h3><div class="value">342</div></div>
             </div>
+            
             <h2 class="section-title">Évolution des ventes</h2>
             <div class="chart-mockup">
                 <div class="bar" style="height: 30%;"></div>
@@ -558,6 +479,9 @@
                 <div class="bar" style="height: 70%;"></div>
                 <div class="bar" style="height: 85%;"></div>
                 <div class="bar" style="height: 100%;"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; color: var(--text-gray); font-size: 0.8rem; padding: 0 10px;">
+                <span>Avril</span><span>Mai</span><span>Juin</span><span>Juillet</span><span>Août</span><span>Septembre</span>
             </div>
         </div>
 
@@ -568,8 +492,16 @@
                 <div class="balance">0,00 €</div>
                 <button class="btn-withdraw"><i class="fas fa-university"></i> Retirer les fonds</button>
             </div>
+            
             <h2 class="section-title">Historique des transactions</h2>
             <div class="transaction-list">
+                <div class="transaction-item">
+                    <div class="trans-info">
+                        <h4>Paiement Hébergement - TradeLink Connect</h4>
+                        <p>Payé par Carte Saber Aballagh (**3490)</p>
+                    </div>
+                    <div class="trans-amount" style="color: var(--alert-red);">- 349,00 €</div>
+                </div>
                 <div class="transaction-item">
                     <div class="trans-info">
                         <h4>Retrait vers Carte Saber Aballagh (**0298)</h4>
@@ -606,6 +538,14 @@
                     </div>
                     <div class="status-badge status-active">En révision (J-2)</div>
                 </div>
+                <div class="client-card">
+                    <div class="client-avatar">JD</div>
+                    <div class="client-info">
+                        <h4 style="margin-bottom: 5px;">John Doe (Studio XYZ)</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-gray);">Intégration API de paiement</p>
+                    </div>
+                    <div class="status-badge status-active">Développement</div>
+                </div>
             </div>
         </div>
 
@@ -618,7 +558,7 @@
             <div class="review-grid">
                 <div class="review-card">
                     <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p class="review-text">"Saber est un développeur exceptionnel. Dashboard livré avant la deadline."</p>
+                    <p class="review-text">"Saber est un développeur exceptionnel. La communication était parfaite et il a livré le dashboard 2 jours avant la deadline."</p>
                     <div class="review-author">- Thomas B. (France)</div>
                 </div>
             </div>
@@ -626,24 +566,36 @@
 
         <!-- ONGLET : PARAMÈTRES -->
         <div id="tab-settings" class="tab-content">
-            <h2 class="section-title">Paramètres du compte Fiverr</h2>
+            <h2 class="section-title">Paramètres du compte Memphis Doku</h2>
             <div class="settings-form">
-                <div class="form-group"><label>Nom du Développeur</label><input type="text" value="Saber Aballagh" readonly></div>
-                <div class="form-group"><label>Nom de l'Application</label><input type="text" value="Fiverr" readonly></div>
+                <div class="form-group">
+                    <label>Nom du Développeur</label>
+                    <input type="text" value="Saber Aballagh" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Nom de l'Entreprise / Entité</label>
+                    <input type="text" value="Memphis Doku" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Email de contact Fiverr</label>
+                    <input type="email" value="contact@memphisdoku.dev">
+                </div>
             </div>
         </div>
 
     </main>
 
-    <!-- Modale Infos Compte -->
+    <!-- Modale Informations Compte -->
     <div id="infoModal" class="modal">
         <div class="modal-content border-green" style="border-color: var(--fiverr-green);">
             <span class="close" id="closeModalBtn">&times;</span>
             <h2 style="text-align: center; color: var(--fiverr-green); font-family: 'Playfair Display', serif; margin-bottom: 20px;">Informations du Compte</h2>
+            
             <div style="background: var(--bg-dark); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border-color);">
-                <label style="font-size: 0.8rem; color: var(--text-gray); display: block; margin-bottom: 5px;">Application</label>
-                <p style="font-size: 1.1rem; font-weight: 600; color: white;"><i class="fas fa-store" style="color: var(--fiverr-green); margin-right: 8px;"></i> Fiverr</p>
+                <label style="font-size: 0.8rem; color: var(--text-gray); display: block; margin-bottom: 5px;">Propriétaire de l'entreprise</label>
+                <p style="font-size: 1.1rem; font-weight: 600; color: white;"><i class="fas fa-building" style="color: var(--fiverr-green); margin-right: 8px;"></i> Memphis Doku</p>
             </div>
+            
             <div style="background: var(--bg-dark); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border-color);">
                 <label style="font-size: 0.8rem; color: var(--text-gray); display: block; margin-bottom: 5px;">Développeur Principal</label>
                 <p style="font-size: 1.1rem; font-weight: 600; color: white;"><i class="fas fa-code" style="color: var(--fiverr-green); margin-right: 8px;"></i> Saber Aballagh</p>
@@ -651,22 +603,7 @@
         </div>
     </div>
 
-    <!-- Modale de Paiement -->
-    <div id="paymentModal" class="modal">
-        <div class="modal-content" style="border-color: #d4af37;">
-            <span class="close" id="closePaymentModalBtn">&times;</span>
-            <h2 style="text-align: center; color: #d4af37; font-family: 'Playfair Display', serif; margin-bottom: 15px;">Paiement Sécurisé</h2>
-            <p style="font-size: 0.85rem; color: var(--text-gray); text-align: center; margin-bottom: 20px;">Règlement de l'hébergement TradeLink Connect (349,00 €)</p>
-            <div class="payment-card-preview">
-                <div class="card-type"><span>Mastercard Titanium</span><i class="fab fa-cc-mastercard" style="font-size: 1.5rem; color: #eb001b;"></i></div>
-                <div class="card-number">•••• •••• •••• 3490</div>
-                <div class="card-holder"><span>Saber Aballagh</span><span>EXP: 06/27</span></div>
-            </div>
-            <button onclick="alert('Paiement de 349 € effectué avec succès via la carte Mastercard Titanium (**3490).'); document.getElementById('paymentModal').style.display='none';" style="width: 100%; background: var(--fiverr-green); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px;">Confirmer le paiement de 349 €</button>
-        </div>
-    </div>
-
-    <!-- Scripts -->
+    <!-- Script JavaScript -->
     <script>
         const tabLinks = document.querySelectorAll(".tab-link");
         const tabContents = document.querySelectorAll(".tab-content");
@@ -676,31 +613,26 @@
                 e.preventDefault(); 
                 tabLinks.forEach(t => t.classList.remove("active"));
                 tabContents.forEach(c => c.classList.remove("active"));
+                
                 this.classList.add("active");
-                document.getElementById(this.getAttribute("data-target")).classList.add("active");
+                const targetId = this.getAttribute("data-target");
+                document.getElementById(targetId).classList.add("active");
                 window.scrollTo({ top: 150, behavior: 'smooth' });
             });
         });
 
+        // Modale Infos Compte
         const infoModal = document.getElementById("infoModal");
-        document.getElementById("openModalBtn").onclick = () => infoModal.style.display = "block";
-        document.getElementById("closeModalBtn").onclick = () => infoModal.style.display = "none";
+        const btnInfos = document.getElementById("openModalBtn");
+        const closeInfoModal = document.getElementById("closeModalBtn");
 
-        const paymentModal = document.getElementById("paymentModal");
-        document.getElementById("openPaymentModalBtn").onclick = () => paymentModal.style.display = "block";
-        document.getElementById("closePaymentModalBtn").onclick = () => paymentModal.style.display = "none";
+        btnInfos.onclick = () => infoModal.style.display = "block";
+        closeInfoModal.onclick = () => infoModal.style.display = "none";
 
-        window.onclick = (e) => {
-            if (e.target == infoModal) infoModal.style.display = "none";
-            if (e.target == paymentModal) paymentModal.style.display = "none";
-        };
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                .then(reg => console.log('Service Worker enregistré !', reg))
-                .catch(err => console.log('Erreur Service Worker :', err));
-            });
+        window.onclick = function(event) {
+            if (event.target == infoModal) {
+                infoModal.style.display = "none";
+            }
         }
     </script>
 </body>
