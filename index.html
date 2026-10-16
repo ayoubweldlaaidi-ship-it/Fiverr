@@ -33,6 +33,39 @@
             color: var(--text-white);
         }
 
+        /* --- NOTIFICATION BANNER --- */
+        .alert-banner {
+            background-color: var(--alert-red);
+            color: white;
+            text-align: center;
+            padding: 12px 20px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            animation: pulseAlert 2s infinite ease-in-out;
+            position: relative;
+            z-index: 101;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+        }
+
+        @keyframes pulseAlert {
+            0% { background-color: var(--alert-red); }
+            50% { background-color: #dc2626; transform: scale(1.002); }
+            100% { background-color: var(--alert-red); }
+        }
+
+        .countdown-timer {
+            font-family: 'Plus Jakarta Sans', monospace;
+            font-weight: 700;
+            background: rgba(0,0,0,0.25);
+            padding: 3px 8px;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+        }
+
         /* --- BARRE DE NAVIGATION --- */
         .navbar {
             display: flex;
@@ -272,7 +305,7 @@
             background: rgba(29, 191, 115, 0.5); color: rgba(255, 255, 255, 0.5);
             border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; cursor: not-allowed;
         }
-        .transaction-list { background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); }
+        .transaction-list { background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 25px; }
         .transaction-item {
             display: flex; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border-color);
         }
@@ -280,6 +313,35 @@
         .trans-info h4 { font-size: 0.95rem; margin-bottom: 4px; }
         .trans-info p { font-size: 0.8rem; color: var(--text-gray); }
         .trans-amount { font-weight: bold; color: var(--fiverr-green); }
+
+        /* Style pour facture impayée */
+        .unpaid-invoice { 
+            border: 1px solid var(--alert-red); 
+            background: rgba(239, 68, 68, 0.05); 
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .unpaid-invoice:hover {
+            background: rgba(239, 68, 68, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+        }
+        .unpaid-invoice::after {
+            content: 'Cliquer pour payer \f061';
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 0.8rem;
+            color: var(--alert-red);
+            opacity: 0;
+            transition: 0.3s;
+        }
+        .unpaid-invoice:hover::after { opacity: 1; }
+        
+        .badge-unpaid { background: rgba(239,68,68,0.15); color: var(--alert-red); padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; border: 1px solid var(--alert-red); }
 
         .client-list { display: flex; flex-direction: column; gap: 15px; }
         .client-card {
@@ -311,14 +373,78 @@
             background-color: rgba(0,0,0,0.8); backdrop-filter: blur(5px); overflow-y: auto;
         }
         .modal-content {
-            background-color: var(--bg-card); margin: 10% auto; padding: 30px; border: 1px solid var(--fiverr-green);
+            background-color: var(--bg-card); margin: 10% auto; padding: 30px; border: 1px solid var(--border-color);
             border-radius: 12px; width: 90%; max-width: 500px; position: relative;
         }
         .close { color: var(--text-gray); position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; }
         .close:hover { color: white; }
+
+        /* --- STYLES MODALE PAIEMENT --- */
+        .payment-option {
+            display: flex; align-items: center; padding: 15px; background: var(--bg-dark); 
+            border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 12px;
+            cursor: pointer; transition: 0.2s; position: relative;
+        }
+        .payment-option.selected {
+            border-color: var(--fiverr-green);
+            background: rgba(29, 191, 115, 0.05);
+        }
+        .payment-option.selected .pay-check { opacity: 1; color: var(--fiverr-green); }
+        .payment-option.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            border-color: var(--border-color) !important;
+            background: var(--bg-dark) !important;
+        }
+        .pay-icon { width: 50px; height: 35px; background: #fff; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-right: 15px; }
+        .pay-details { flex: 1; }
+        .pay-title { font-weight: 600; font-size: 0.95rem; color: white; }
+        .pay-sub { font-size: 0.8rem; color: var(--text-gray); margin-top: 2px; }
+        .pay-check { font-size: 1.2rem; opacity: 0; transition: 0.2s; }
+        
+        .btn-pay-now {
+            width: 100%; padding: 14px; background: var(--fiverr-green); color: white;
+            border: none; border-radius: 8px; font-weight: 700; font-size: 1rem;
+            margin-top: 20px; cursor: pointer; transition: 0.3s;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-pay-now:hover { background: #19a463; transform: translateY(-2px); }
+
+        /* --- STYLES CHARGEMENT ET ERREUR --- */
+        .loading-state, .error-state {
+            display: none; text-align: center; padding: 40px 0;
+        }
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1); border-left-color: var(--fiverr-green);
+            border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite;
+            margin: 0 auto 20px auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .error-icon {
+            font-size: 60px; color: var(--alert-red); margin-bottom: 20px; animation: popIn 0.3s ease-out;
+        }
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        
+        .error-title { color: var(--alert-red); font-size: 1.3rem; margin-bottom: 10px; }
+        .error-desc { color: var(--text-gray); font-size: 0.95rem; line-height: 1.5; }
+        
+        .btn-retry {
+            margin-top: 25px; padding: 10px 20px; background: transparent; border: 1px solid var(--text-gray);
+            color: white; border-radius: 6px; cursor: pointer; font-weight: 600;
+        }
+        .btn-retry:hover { border-color: white; }
     </style>
 </head>
 <body>
+
+    <!-- Bannière de notification d'alerte -->
+    <div class="alert-banner">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span>
+            <strong>URGENT :</strong> Facture impayée pour l'hébergement CyberGuard 360 (349 €). Fin de service dans <span id="countdown-banner" class="countdown-timer">Calcul...</span>
+        </span>
+    </div>
 
     <!-- Barre de navigation -->
     <header class="navbar">
@@ -392,17 +518,6 @@
                     </div>
                     <button class="btn-view" onclick="alert('Détails non inclus dans l\'aperçu global.')">Voir les détails</button>
                 </div>
-                <div class="app-card">
-                    <div class="app-header">
-                        <div class="app-icon" style="color: #10b981;"><i class="fas fa-id-card"></i></div>
-                        <div class="app-title"><h4>Scout & Transfer Pro</h4><span>Gestion Carrière Foot</span></div>
-                    </div>
-                    <div class="app-stats">
-                        <div class="stat-item"><div class="label">Licences</div><div class="data">8.1K</div></div>
-                        <div class="stat-item"><div class="label">Note</div><div class="data"><i class="fas fa-star"></i> 5.0</div></div>
-                    </div>
-                    <button class="btn-view" onclick="alert('Détails non inclus dans l\'aperçu global.')">Voir les détails</button>
-                </div>
             </div>
         </div>
 
@@ -410,7 +525,6 @@
         <div id="tab-hosting" class="tab-content">
             <h2 class="section-title"><i class="fas fa-server" style="color: var(--fiverr-green);"></i> Gestion des Hébergements & Templates</h2>
             <div class="charges-list">
-                <!-- Charge Payée (TradeLink Connect) -->
                 <div class="charge-card">
                     <div class="charge-info">
                         <h4>Hébergement Trimestriel - TradeLink Connect</h4>
@@ -419,43 +533,6 @@
                     </div>
                     <div class="charge-right">
                         <div class="charge-amount">349,00 €</div>
-                        <span class="badge-paid">Payé</span>
-                    </div>
-                </div>
-
-                <!-- Charges Déjà Payées -->
-                <div class="charge-card">
-                    <div class="charge-info">
-                        <h4>Hébergement Annuel - MasterScore AI PWA</h4>
-                        <p>Serveur Edge & CDN Cloudflare</p>
-                        <p style="margin-top: 5px; font-size: 0.8rem;">Réglé le 15/01/2026</p>
-                    </div>
-                    <div class="charge-right">
-                        <div class="charge-amount">180,00 €</div>
-                        <span class="badge-paid">Payé</span>
-                    </div>
-                </div>
-
-                <div class="charge-card">
-                    <div class="charge-info">
-                        <h4>Licence Template UI - Dashboard Admin Pro</h4>
-                        <p>Droits d'utilisation et maintenance structurelle</p>
-                        <p style="margin-top: 5px; font-size: 0.8rem;">Réglé le 02/05/2026</p>
-                    </div>
-                    <div class="charge-right">
-                        <div class="charge-amount">95,00 €</div>
-                        <span class="badge-paid">Payé</span>
-                    </div>
-                </div>
-
-                <div class="charge-card">
-                    <div class="charge-info">
-                        <h4>Hébergement Cloud - Brigade 8</h4>
-                        <p>Serveur de base de données sécurisé</p>
-                        <p style="margin-top: 5px; font-size: 0.8rem;">Réglé le 01/09/2026</p>
-                    </div>
-                    <div class="charge-right">
-                        <div class="charge-amount">120,00 €</div>
                         <span class="badge-paid">Payé</span>
                     </div>
                 </div>
@@ -470,19 +547,6 @@
                 <div class="stat-box"><h3>Taux de Conversion</h3><div class="value">4.2%</div></div>
                 <div class="stat-box"><h3>Commandes Terminées</h3><div class="value">342</div></div>
             </div>
-            
-            <h2 class="section-title">Évolution des ventes</h2>
-            <div class="chart-mockup">
-                <div class="bar" style="height: 30%;"></div>
-                <div class="bar" style="height: 50%;"></div>
-                <div class="bar" style="height: 40%;"></div>
-                <div class="bar" style="height: 70%;"></div>
-                <div class="bar" style="height: 85%;"></div>
-                <div class="bar" style="height: 100%;"></div>
-            </div>
-            <div style="display: flex; justify-content: space-between; color: var(--text-gray); font-size: 0.8rem; padding: 0 10px;">
-                <span>Avril</span><span>Mai</span><span>Juin</span><span>Juillet</span><span>Août</span><span>Septembre</span>
-            </div>
         </div>
 
         <!-- ONGLET : FINANCES -->
@@ -493,6 +557,24 @@
                 <button class="btn-withdraw"><i class="fas fa-university"></i> Retirer les fonds</button>
             </div>
             
+            <!-- SECTION : FACTURE EN ATTENTE (Cliquable) -->
+            <h2 class="section-title" style="color: var(--alert-red);"><i class="fas fa-exclamation-circle"></i> Facture Requise</h2>
+            <div class="transaction-list unpaid-invoice" id="openPaymentModalBtn">
+                <div class="transaction-item" style="padding-bottom: 25px;">
+                    <div class="trans-info">
+                        <h4 style="color: var(--alert-red); font-size: 1.05rem;">Hébergement Trimestriel - CyberGuard 360</h4>
+                        <p style="color: white; margin-top: 5px;">Termine le : <strong>17/10/2026 à 23h59</strong></p>
+                        <p style="margin-top: 8px; font-weight: 500; font-size: 0.9rem;">
+                            Coupure du service dans : <span id="countdown-finance" style="color: var(--alert-red); font-weight: 700;">Calcul...</span>
+                        </p>
+                    </div>
+                    <div style="text-align: right; display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-end; gap: 8px;">
+                        <div class="trans-amount" style="color: white; font-size: 1.3rem;">349,00 €</div>
+                        <span class="badge-unpaid">Impayée</span>
+                    </div>
+                </div>
+            </div>
+
             <h2 class="section-title">Historique des transactions</h2>
             <div class="transaction-list">
                 <div class="transaction-item">
@@ -509,20 +591,6 @@
                     </div>
                     <div class="trans-amount" style="color: white;">- 1 200,00 €</div>
                 </div>
-                <div class="transaction-item">
-                    <div class="trans-info">
-                        <h4>Commande #FO-4923 - PWA Développement</h4>
-                        <p>Fonds validés - Client: Mark L.</p>
-                    </div>
-                    <div class="trans-amount">+ 450,00 €</div>
-                </div>
-                <div class="transaction-item">
-                    <div class="trans-info">
-                        <h4>Retrait vers Carte Saber Aballagh (**0298)</h4>
-                        <p>Traité le 01 Septembre</p>
-                    </div>
-                    <div class="trans-amount" style="color: white;">- 2 450,00 €</div>
-                </div>
             </div>
         </div>
 
@@ -538,14 +606,6 @@
                     </div>
                     <div class="status-badge status-active">En révision (J-2)</div>
                 </div>
-                <div class="client-card">
-                    <div class="client-avatar">JD</div>
-                    <div class="client-info">
-                        <h4 style="margin-bottom: 5px;">John Doe (Studio XYZ)</h4>
-                        <p style="font-size: 0.8rem; color: var(--text-gray);">Intégration API de paiement</p>
-                    </div>
-                    <div class="status-badge status-active">Développement</div>
-                </div>
             </div>
         </div>
 
@@ -556,11 +616,127 @@
                 <div class="stat-box" style="padding: 10px;"><h3>Avis Totaux</h3><div class="value" style="font-size: 1.2rem;">1,284</div></div>
             </div>
             <div class="review-grid">
-                <div class="review-card">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p class="review-text">"Saber est un développeur exceptionnel. La communication était parfaite et il a livré le dashboard 2 jours avant la deadline."</p>
-                    <div class="review-author">- Thomas B. (France)</div>
-                </div>
+                <!-- 100 AVIS FAVORABLES EUROPÉENS -->
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Saber est un développeur exceptionnel. La communication était parfaite et il a livré le dashboard 2 jours avant la deadline."</p><div class="review-author">- Thomas B. (France)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"L'application Tactics Pro Arena est incroyablement fluide. Code très propre, merci Saber !"</p><div class="review-author">- Lukas M. (Allemagne)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"TradeLink Connect a complètement transformé notre workflow. Excellent travail du développeur."</p><div class="review-author">- Sophie L. (Belgique)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Je recommande Saber à 100%. CyberGuard 360 est sécurisé et l'interface est magnifique."</p><div class="review-author">- Marco V. (Italie)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Une réactivité sans faille. Le meilleur freelance avec qui j'ai travaillé sur Fiverr."</p><div class="review-author">- Clara D. (Suisse)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Scout & Transfer Pro est un chef d'œuvre. Saber comprend les besoins techniques complexes."</p><div class="review-author">- Carlos S. (Espagne)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Développement rapide, aucun bug lors du déploiement. Bravo !"</p><div class="review-author">- Emma W. (Royaume-Uni)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Saber est très à l'écoute. Les modifications ont été faites en un clin d'oeil."</p><div class="review-author">- Pieter v. d. M. (Pays-Bas)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"La PWA est parfaite. Mes clients adorent la nouvelle interface développée par Memphis Doku."</p><div class="review-author">- Lars E. (Suède)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Top développeur. Communication claire, livraison rapide. CyberGuard est génial."</p><div class="review-author">- João P. (Portugal)</div></div>
+                
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Saber est un magicien du code. Tout fonctionne à merveille."</p><div class="review-author">- Antoine R. (France)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Tactics Pro Arena est d'une stabilité incroyable, même avec beaucoup de data."</p><div class="review-author">- Hans K. (Autriche)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Une expérience cinq étoiles avec Saber. L'app de gestion est très intuitive."</p><div class="review-author">- Elena C. (Espagne)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Très professionnel. Il a corrigé tous les bugs de mon ancien développeur."</p><div class="review-author">- Matteo F. (Italie)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"L'intégration API de paiement est parfaite, aucun problème en production."</p><div class="review-author">- David M. (Royaume-Uni)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"CyberGuard 360 est un produit solide. Saber a fait du super boulot."</p><div class="review-author">- Mathias L. (Danemark)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Développeur réactif, même le week-end. Un vrai passionné !"</p><div class="review-author">- Julien T. (Belgique)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"TradeLink Connect a été livré avant la date prévue avec une qualité irréprochable."</p><div class="review-author">- Nina S. (Allemagne)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"C'est un plaisir de travailler avec Saber. Compétence technique indéniable."</p><div class="review-author">- Alain V. (Suisse)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Excellente gestion de projet. Le dashboard est magnifique."</p><div class="review-author">- Maria G. (Portugal)</div></div>
+
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Le meilleur dev avec qui j'ai collaboré. Tactics Pro Arena marche super bien."</p><div class="review-author">- Simon L. (France)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Saber est très patient et donne de bons conseils techniques."</p><div class="review-author">- Giulia B. (Italie)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"CyberGuard a renforcé notre sécurité. Le code backend est très robuste."</p><div class="review-author">- Erik J. (Suède)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Un service exceptionnel, je referai appel à Memphis Doku sans hésiter."</p><div class="review-author">- Kevin H. (Royaume-Uni)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Interface utilisateur parfaite. Scout & Transfer est hyper réactif."</p><div class="review-author">- Pablo R. (Espagne)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Saber a compris notre vision immédiatement. Résultat incroyable."</p><div class="review-author">- Florian W. (Allemagne)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Le support après-vente est tout aussi bon que le développement initial."</p><div class="review-author">- Camille D. (Belgique)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Une maîtrise parfaite du frontend et du backend. Bravo Saber."</p><div class="review-author">- Jeroen K. (Pays-Bas)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Je suis bluffé par la rapidité de l'application TradeLink Connect."</p><div class="review-author">- Luca T. (Suisse)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Super dev, très poli et professionnel. 5 étoiles méritées."</p><div class="review-author">- Tiago F. (Portugal)</div></div>
+
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Mon app de sport n'a jamais été aussi rapide. Merci Saber !"</p><div class="review-author">- Victor M. (France)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"L'architecture de CyberGuard 360 est impressionnante."</p><div class="review-author">- Oliver B. (Royaume-Uni)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Saber trouve des solutions là où les autres bloquent."</p><div class="review-author">- Stefan G. (Allemagne)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Qualité de code irréprochable et documentation claire."</p><div class="review-author">- Lucia M. (Espagne)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Tactics Pro Arena a fait décoller notre startup."</p><div class="review-author">- Alessandro P. (Italie)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Un freelance en or. Très communicatif et transparent."</p><div class="review-author">- Maxime C. (Belgique)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Le déploiement de TradeLink s'est fait sans aucun heurt."</p><div class="review-author">- Niels O. (Danemark)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Je suis ravie du résultat. Saber est très talentueux."</p><div class="review-author">- Anna K. (Autriche)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Scout & Transfer Pro est très complet. Excellent travail."</p><div class="review-author">- Rui S. (Portugal)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Livraison parfaite, Saber a dépassé mes attentes."</p><div class="review-author">- Johan D. (Pays-Bas)</div></div>
+
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Saber est mon développeur de référence maintenant."</p><div class="review-author">- Romain T. (France)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"L'interface de CyberGuard est moderne et responsive."</p><div class="review-author">- Felix R. (Suisse)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Excellente gestion des bases de données. Très rapide."</p><div class="review-author">- Markus W. (Allemagne)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"TradeLink Connect gère des milliers d'utilisateurs sans souci."</p><div class="review-author">- Javier L. (Espagne)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Très professionnel. Saber respecte toujours les délais."</p><div class="review-author">- Sarah J. (Royaume-Uni)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Le design et le code sont parfaitement alignés. Merci."</p><div class="review-author">- Francesco R. (Italie)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Application sans faille. Saber maîtrise son sujet."</p><div class="review-author">- Anders P. (Suède)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Tactics Pro est l'outil ultime. Le backend est ultra puissant."</p><div class="review-author">- Maarten B. (Belgique)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Développement soigné. Saber est très méticuleux."</p><div class="review-author">- Hugo V. (Pays-Bas)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"CyberGuard 360 est exactement ce que nous cherchions."</p><div class="review-author">- Pedro A. (Portugal)</div></div>
+
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Saber a fait preuve d'une grande créativité pour notre projet."</p><div class="review-author">- Nicolas P. (France)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"L'UX/UI de TradeLink Connect est incroyable. Bravo."</p><div class="review-author">- Leon G. (Allemagne)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Je n'ai jamais vu un code aussi propre. Merci Saber."</p><div class="review-author">- Laura F. (Italie)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Un accompagnement technique au top niveau."</p><div class="review-author">- Daniel M. (Espagne)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Scout & Transfer a optimisé notre temps de travail de 40%."</p><div class="review-author">- George H. (Royaume-Uni)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Le meilleur investissement de l'année. Saber est pro."</p><div class="review-author">- Mathias S. (Suisse)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Rapide, efficace et extrêmement poli."</p><div class="review-author">- Simon K. (Autriche)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"CyberGuard 360 est un outil indispensable. Super dev."</p><div class="review-author">- Emil C. (Danemark)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Très bon relationnel, les retours sont pris en compte rapidement."</p><div class="review-author">- Théo D. (Belgique)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Rien à dire, tout est parfait. Memphis Doku est une valeur sûre."</p><div class="review-author">- Tomas R. (Portugal)</div></div>
+
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Saber a créé une app au-delà de mes attentes."</p><div class="review-author">- Léo M. (France)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Tactics Pro a un mode hors-ligne qui marche à merveille."</p><div class="review-author">- Jonas L. (Allemagne)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Je collabore avec Saber depuis 2 ans, jamais déçue."</p><div class="review-author">- Alice C. (Belgique)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"TradeLink Connect est rapide comme l'éclair. Beau travail."</p><div class="review-author">- Sergio B. (Espagne)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Le dashboard admin de CyberGuard est super intuitif."</p><div class="review-author">- Luigi D. (Italie)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Un grand merci à Saber pour sa disponibilité."</p><div class="review-author">- Arthur T. (Suisse)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Saber comprend très vite les problèmes complexes."</p><div class="review-author">- Harry C. (Royaume-Uni)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Une qualité de prestation rare sur Fiverr."</p><div class="review-author">- Mikael S. (Suède)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Scout & Transfer Pro est un succès total."</p><div class="review-author">- Daan V. (Pays-Bas)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Bravo pour l'optimisation serveur, c'est très performant."</p><div class="review-author">- Nuno C. (Portugal)</div></div>
+
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"L'interface est exactement comme la maquette."</p><div class="review-author">- Bastien F. (France)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"CyberGuard m'a évité de nombreuses attaques."</p><div class="review-author">- Klaus E. (Allemagne)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Saber est un partenaire de confiance pour notre agence."</p><div class="review-author">- Diego M. (Espagne)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Très bon travail sur TradeLink. Les API sont fiables."</p><div class="review-author">- Andrea P. (Italie)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Livrables de très haute qualité. A recommander."</p><div class="review-author">- William S. (Royaume-Uni)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Le support est fantastique, toujours là en cas de besoin."</p><div class="review-author">- Lucas B. (Belgique)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Saber maîtrise les dernières technos web et mobile."</p><div class="review-author">- Felix A. (Suisse)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Rien n'est laissé au hasard. Très minutieux."</p><div class="review-author">- Jakob N. (Autriche)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"L'application est très bien sécurisée et optimisée."</p><div class="review-author">- Henrik O. (Danemark)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Excellent ! Saber a fait du super boulot sur le projet."</p><div class="review-author">- Joop W. (Pays-Bas)</div></div>
+
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Tactics Pro Arena est l'app la plus stable de sa catégorie."</p><div class="review-author">- Paul M. (France)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Un vrai pro, le code est commenté et très structuré."</p><div class="review-author">- Tim H. (Allemagne)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Saber est très amical et professionnel."</p><div class="review-author">- Enzo G. (Italie)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"TradeLink Connect est parfait. Je suis bluffé."</p><div class="review-author">- Alejandro V. (Espagne)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Saber a respecté toutes mes exigences. Merci."</p><div class="review-author">- Charles W. (Royaume-Uni)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"CyberGuard 360 est super rapide. Une tuerie."</p><div class="review-author">- Martin B. (Belgique)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Le meilleur développeur full-stack que j'ai rencontré."</p><div class="review-author">- Nils T. (Suède)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Scout & Transfer Pro nous fait gagner un temps précieux."</p><div class="review-author">- Bruno S. (Portugal)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"La mise en production a été un vrai succès."</p><div class="review-author">- Marc K. (Suisse)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"L'interface est claire, le code est propre. Impeccable."</p><div class="review-author">- Bram J. (Pays-Bas)</div></div>
+
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Je suis fan de CyberGuard. C'est sécurisé et esthétique."</p><div class="review-author">- Gabriel L. (France)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Saber est un expert dans son domaine."</p><div class="review-author">- Karl H. (Allemagne)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Je n'hésiterai pas à refaire appel à ses services."</p><div class="review-author">- Lorenzo M. (Italie)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Tactics Pro Arena est top, même sur les anciens téléphones."</p><div class="review-author">- Manuel R. (Espagne)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Tout s'est très bien passé. Merci Saber !"</p><div class="review-author">- Jack S. (Royaume-Uni)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Super collaboration. Le projet a été géré parfaitement."</p><div class="review-author">- Denis P. (Belgique)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"TradeLink Connect est exactement ce que je voulais."</p><div class="review-author">- Simon F. (Suisse)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Développeur très pro, disponible et réactif."</p><div class="review-author">- Oskar A. (Suède)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Scout & Transfer Pro fonctionne à la perfection."</p><div class="review-author">- Leon F. (Autriche)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Je suis entièrement satisfait de CyberGuard 360."</p><div class="review-author">- Filipe N. (Portugal)</div></div>
+
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Le meilleur service Fiverr ! Saber est très compétent."</p><div class="review-author">- Clément G. (France)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Code optimisé, interface utilisateur incroyable. Merci."</p><div class="review-author">- Bernd M. (Allemagne)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Le support pour TradeLink Connect est très réactif."</p><div class="review-author">- Riccardo T. (Italie)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Très satisfait de Tactis Pro Arena."</p><div class="review-author">- Jorge L. (Espagne)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Communication parfaite. Produit final magnifique."</p><div class="review-author">- Ben W. (Royaume-Uni)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"L'hébergement de CyberGuard est fiable et rapide."</p><div class="review-author">- Vincent D. (Belgique)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Saber est très doué, il a résolu tous nos problèmes."</p><div class="review-author">- Christian K. (Suisse)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Les performances de Scout & Transfer sont excellentes."</p><div class="review-author">- Jonas V. (Suède)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Le design est moderne, et l'app tourne sans bug."</p><div class="review-author">- Thijs B. (Pays-Bas)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Un grand professionnel. Je le recommande vivement."</p><div class="review-author">- Vasco M. (Portugal)</div></div>
             </div>
         </div>
 
@@ -590,12 +766,10 @@
         <div class="modal-content border-green" style="border-color: var(--fiverr-green);">
             <span class="close" id="closeModalBtn">&times;</span>
             <h2 style="text-align: center; color: var(--fiverr-green); font-family: 'Playfair Display', serif; margin-bottom: 20px;">Informations du Compte</h2>
-            
             <div style="background: var(--bg-dark); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border-color);">
                 <label style="font-size: 0.8rem; color: var(--text-gray); display: block; margin-bottom: 5px;">Propriétaire de l'entreprise</label>
                 <p style="font-size: 1.1rem; font-weight: 600; color: white;"><i class="fas fa-building" style="color: var(--fiverr-green); margin-right: 8px;"></i> Memphis Doku</p>
             </div>
-            
             <div style="background: var(--bg-dark); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border-color);">
                 <label style="font-size: 0.8rem; color: var(--text-gray); display: block; margin-bottom: 5px;">Développeur Principal</label>
                 <p style="font-size: 1.1rem; font-weight: 600; color: white;"><i class="fas fa-code" style="color: var(--fiverr-green); margin-right: 8px;"></i> Saber Aballagh</p>
@@ -603,8 +777,66 @@
         </div>
     </div>
 
+    <!-- NOUVELLE MODALE : PAIEMENT DE LA FACTURE -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content" style="border-color: var(--alert-red);">
+            <span class="close" id="closePaymentModalBtn">&times;</span>
+            
+            <!-- ETAPE 1 : PAIEMENT -->
+            <div id="payment-step-1">
+                <h2 style="text-align: center; color: white; margin-bottom: 10px;">Régler la facture</h2>
+                <p style="text-align: center; color: var(--text-gray); margin-bottom: 25px;">
+                    CyberGuard 360 - Hébergement Trimestriel<br>
+                    <strong style="color: white; font-size: 1.8rem; display: inline-block; margin-top: 10px;">349,00 €</strong>
+                </p>
+
+                <h4 style="margin-bottom: 15px; color: var(--text-gray); font-size: 0.9rem;">Sélectionnez un moyen de paiement :</h4>
+                
+                <!-- Option 1 : Mastercard (Sélectionnée par défaut) -->
+                <label class="payment-option selected">
+                    <div class="pay-icon"><i class="fab fa-cc-mastercard" style="color: #ff5f00; font-size: 24px;"></i></div>
+                    <div class="pay-details">
+                        <div class="pay-title">Mastercard **3490</div>
+                        <div class="pay-sub">Saber Aballagh</div>
+                    </div>
+                    <div class="pay-check"><i class="fas fa-check-circle"></i></div>
+                </label>
+
+                <!-- Option 2 : Solde Fiverr (Désactivé car 0€) -->
+                <label class="payment-option disabled" title="Solde insuffisant">
+                    <div class="pay-icon" style="background: #333;"><i class="fas fa-wallet" style="color: var(--text-gray); font-size: 20px;"></i></div>
+                    <div class="pay-details">
+                        <div class="pay-title" style="color: var(--text-gray);">Solde Fiverr</div>
+                        <div class="pay-sub" style="color: var(--alert-red);">0,00 € disponible</div>
+                    </div>
+                    <div class="pay-check"><i class="fas fa-check-circle"></i></div>
+                </label>
+
+                <button class="btn-pay-now" id="btn-process-payment">
+                    <i class="fas fa-lock"></i> Payer 349,00 €
+                </button>
+            </div>
+
+            <!-- ETAPE 2 : CHARGEMENT -->
+            <div id="payment-step-loading" class="loading-state">
+                <div class="spinner"></div>
+                <h3 style="color: white; margin-bottom: 5px;">Traitement en cours...</h3>
+                <p style="color: var(--text-gray); font-size: 0.9rem;">Veuillez patienter, connexion à votre banque.</p>
+            </div>
+
+            <!-- ETAPE 3 : ERREUR -->
+            <div id="payment-step-error" class="error-state">
+                <div class="error-icon"><i class="fas fa-times-circle"></i></div>
+                <h3 class="error-title">Paiement Refusé</h3>
+                <p class="error-desc">Le solde de votre compte bancaire est insuffisant pour effectuer cette transaction.</p>
+                <button class="btn-retry" id="btn-retry-payment">Retourner</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Script JavaScript -->
     <script>
+        // --- GESTION DES ONGLETS ---
         const tabLinks = document.querySelectorAll(".tab-link");
         const tabContents = document.querySelectorAll(".tab-content");
 
@@ -621,7 +853,7 @@
             });
         });
 
-        // Modale Infos Compte
+        // --- GESTION MODALE INFOS COMPTE ---
         const infoModal = document.getElementById("infoModal");
         const btnInfos = document.getElementById("openModalBtn");
         const closeInfoModal = document.getElementById("closeModalBtn");
@@ -629,11 +861,88 @@
         btnInfos.onclick = () => infoModal.style.display = "block";
         closeInfoModal.onclick = () => infoModal.style.display = "none";
 
+        // --- GESTION MODALE PAIEMENT ---
+        const paymentModal = document.getElementById("paymentModal");
+        const openPaymentBtn = document.getElementById("openPaymentModalBtn");
+        const closePaymentBtn = document.getElementById("closePaymentModalBtn");
+        
+        const step1 = document.getElementById("payment-step-1");
+        const stepLoading = document.getElementById("payment-step-loading");
+        const stepError = document.getElementById("payment-step-error");
+        const btnProcessPayment = document.getElementById("btn-process-payment");
+        const btnRetryPayment = document.getElementById("btn-retry-payment");
+
+        // Ouvrir la modale au clic sur la facture impayée et réinitialiser l'état
+        openPaymentBtn.onclick = () => {
+            step1.style.display = "block";
+            stepLoading.style.display = "none";
+            stepError.style.display = "none";
+            paymentModal.style.display = "block";
+        };
+        
+        // Fermer la modale au clic sur la croix
+        closePaymentBtn.onclick = () => paymentModal.style.display = "none";
+
+        // Processus de paiement (Chargement puis Erreur)
+        btnProcessPayment.onclick = () => {
+            step1.style.display = "none";
+            stepLoading.style.display = "block";
+            
+            // Simuler un délai de connexion de 2.5 secondes
+            setTimeout(() => {
+                stepLoading.style.display = "none";
+                stepError.style.display = "block";
+            }, 2500);
+        };
+
+        // Bouton réessayer
+        btnRetryPayment.onclick = () => {
+            stepError.style.display = "none";
+            step1.style.display = "block";
+        };
+
+        // Fermer les modales si on clique en dehors
         window.onclick = function(event) {
             if (event.target == infoModal) {
                 infoModal.style.display = "none";
             }
+            if (event.target == paymentModal) {
+                paymentModal.style.display = "none";
+            }
         }
+
+        // --- GESTION DU COMPTE À REBOURS ---
+        // Date de fin : 17 Octobre 2026 à 23:59:00
+        const countDownDate = new Date("2026-10-17T23:59:00").getTime();
+
+        const x = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = countDownDate - now;
+
+            // Calcul du temps restant
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Formatage de l'affichage
+            const formattedTime = `${days}j ${hours}h ${minutes}m ${seconds}s`;
+
+            // Mise à jour de la bannière et de l'onglet finance
+            if (document.getElementById("countdown-banner")) {
+                document.getElementById("countdown-banner").innerHTML = formattedTime;
+            }
+            if (document.getElementById("countdown-finance")) {
+                document.getElementById("countdown-finance").innerHTML = formattedTime;
+            }
+
+            // Si le temps est écoulé
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("countdown-banner").innerHTML = "SERVICE EXPIRÉ";
+                document.getElementById("countdown-finance").innerHTML = "SERVICE EXPIRÉ";
+            }
+        }, 1000);
     </script>
 </body>
 </html>
