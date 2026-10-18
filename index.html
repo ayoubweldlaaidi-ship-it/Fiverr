@@ -366,6 +366,14 @@
             width: 100%; padding: 12px; background: var(--bg-dark); border: 1px solid var(--border-color);
             border-radius: 6px; color: white; outline: none;
         }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
 
         /* --- MODALES --- */
         .modal {
@@ -409,6 +417,14 @@
             display: flex; justify-content: center; align-items: center; gap: 10px;
         }
         .btn-pay-now:hover { background: #19a463; transform: translateY(-2px); }
+
+        .btn-add-card {
+            width: 100%; padding: 12px; background: transparent; color: var(--fiverr-green);
+            border: 1px dashed var(--fiverr-green); border-radius: 8px; font-weight: 600; font-size: 0.9rem;
+            margin-top: 5px; margin-bottom: 15px; cursor: pointer; transition: 0.3s;
+            display: flex; justify-content: center; align-items: center; gap: 8px;
+        }
+        .btn-add-card:hover { background: rgba(29, 191, 115, 0.05); }
 
         /* --- STYLES CHARGEMENT ET ERREUR --- */
         .loading-state, .error-state {
@@ -676,7 +692,7 @@
                 <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"L'UX/UI de TradeLink Connect est incroyable. Bravo."</p><div class="review-author">- Leon G. (Allemagne)</div></div>
                 <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Je n'ai jamais vu un code aussi propre. Merci Saber."</p><div class="review-author">- Laura F. (Italie)</div></div>
                 <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Un accompagnement technique au top niveau."</p><div class="review-author">- Daniel M. (Espagne)</div></div>
-                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Scout & Transfer a optimisé notre temps de travail de 40%."</p><div class="review-author">- George H. (Royaume-Uni)</div></div>
+                <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Scout & Transfer Pro a optimisé notre temps de travail de 40%."</p><div class="review-author">- George H. (Royaume-Uni)</div></div>
                 <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Le meilleur investissement de l'année. Saber est pro."</p><div class="review-author">- Mathias S. (Suisse)</div></div>
                 <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"Rapide, efficace et extrêmement poli."</p><div class="review-author">- Simon K. (Autriche)</div></div>
                 <div class="review-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="review-text">"CyberGuard 360 est un outil indispensable. Super dev."</p><div class="review-author">- Emil C. (Danemark)</div></div>
@@ -792,15 +808,22 @@
 
                 <h4 style="margin-bottom: 15px; color: var(--text-gray); font-size: 0.9rem;">Sélectionnez un moyen de paiement :</h4>
                 
-                <!-- Option 1 : Mastercard (Sélectionnée par défaut) -->
-                <label class="payment-option selected">
-                    <div class="pay-icon"><i class="fab fa-cc-mastercard" style="color: #ff5f00; font-size: 24px;"></i></div>
-                    <div class="pay-details">
-                        <div class="pay-title">Mastercard **3490</div>
-                        <div class="pay-sub">Saber Aballagh</div>
-                    </div>
-                    <div class="pay-check"><i class="fas fa-check-circle"></i></div>
-                </label>
+                <div id="payment-options-container">
+                    <!-- Option 1 : Mastercard (Sélectionnée par défaut) -->
+                    <label class="payment-option selected">
+                        <div class="pay-icon"><i class="fab fa-cc-mastercard" style="color: #ff5f00; font-size: 24px;"></i></div>
+                        <div class="pay-details">
+                            <div class="pay-title">Mastercard **3490</div>
+                            <div class="pay-sub">Saber Aballagh</div>
+                        </div>
+                        <div class="pay-check"><i class="fas fa-check-circle"></i></div>
+                    </label>
+                </div>
+
+                <!-- Bouton pour ajouter un autre moyen de paiement -->
+                <button class="btn-add-card" id="btn-open-add-card">
+                    <i class="fas fa-plus"></i> Ajouter une autre carte bancaire
+                </button>
 
                 <!-- Option 2 : Solde Fiverr (Désactivé car 0€) -->
                 <label class="payment-option disabled" title="Solde insuffisant">
@@ -817,6 +840,35 @@
                 </button>
             </div>
 
+            <!-- ETAPE 1.5 : FORMULAIRE COMPLET D'AJOUT DE CARTE -->
+            <div id="payment-step-add-card" style="display: none;">
+                <h2 style="text-align: center; color: white; margin-bottom: 15px;">Ajouter une carte bancaire</h2>
+                <div class="form-group">
+                    <label>Titulaire de la carte</label>
+                    <input type="text" id="new-card-name" placeholder="Ex: Saber Aballagh">
+                </div>
+                <div class="form-group">
+                    <label>Numéro de carte</label>
+                    <input type="text" id="new-card-number" placeholder="4970 XXXX XXXX XXXX" maxlength="19">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Date d'expiration</label>
+                        <input type="text" id="new-card-exp" placeholder="MM/AA" maxlength="5">
+                    </div>
+                    <div class="form-group">
+                        <label>CVV</label>
+                        <input type="password" id="new-card-cvv" placeholder="123" maxlength="4">
+                    </div>
+                </div>
+                <button class="btn-pay-now" id="btn-save-card" style="background: var(--fiverr-green);">
+                    Enregistrer la carte
+                </button>
+                <button class="btn-retry" id="btn-cancel-add-card" style="width: 100%; margin-top: 10px;">
+                    Annuler
+                </button>
+            </div>
+
             <!-- ETAPE 2 : CHARGEMENT -->
             <div id="payment-step-loading" class="loading-state">
                 <div class="spinner"></div>
@@ -827,8 +879,8 @@
             <!-- ETAPE 3 : ERREUR -->
             <div id="payment-step-error" class="error-state">
                 <div class="error-icon"><i class="fas fa-times-circle"></i></div>
-                <h3 class="error-title">Paiement Refusé</h3>
-                <p class="error-desc">Le solde de votre compte bancaire est insuffisant pour effectuer cette transaction.</p>
+                <h3 class="error-title" id="error-title-text">Paiement Refusé</h3>
+                <p class="error-desc" id="error-desc-text">Le solde de votre compte bancaire est insuffisant pour effectuer cette transaction.</p>
                 <button class="btn-retry" id="btn-retry-payment">Retourner</button>
             </div>
         </div>
@@ -867,14 +919,24 @@
         const closePaymentBtn = document.getElementById("closePaymentModalBtn");
         
         const step1 = document.getElementById("payment-step-1");
+        const stepAddCard = document.getElementById("payment-step-add-card");
         const stepLoading = document.getElementById("payment-step-loading");
         const stepError = document.getElementById("payment-step-error");
+        
         const btnProcessPayment = document.getElementById("btn-process-payment");
         const btnRetryPayment = document.getElementById("btn-retry-payment");
+        const btnOpenAddCard = document.getElementById("btn-open-add-card");
+        const btnSaveCard = document.getElementById("btn-save-card");
+        const btnCancelAddCard = document.getElementById("btn-cancel-add-card");
+
+        const paymentOptionsContainer = document.getElementById("payment-options-container");
+        const errorTitleText = document.getElementById("error-title-text");
+        const errorDescText = document.getElementById("error-desc-text");
 
         // Ouvrir la modale au clic sur la facture impayée et réinitialiser l'état
         openPaymentBtn.onclick = () => {
             step1.style.display = "block";
+            stepAddCard.style.display = "none";
             stepLoading.style.display = "none";
             stepError.style.display = "none";
             paymentModal.style.display = "block";
@@ -882,6 +944,78 @@
         
         // Fermer la modale au clic sur la croix
         closePaymentBtn.onclick = () => paymentModal.style.display = "none";
+
+        // Afficher formulaire ajout carte
+        btnOpenAddCard.onclick = () => {
+            step1.style.display = "none";
+            stepAddCard.style.display = "block";
+            document.getElementById("new-card-name").value = "";
+            document.getElementById("new-card-number").value = "";
+            document.getElementById("new-card-exp").value = "";
+            document.getElementById("new-card-cvv").value = "";
+        };
+
+        // Annuler ajout carte
+        btnCancelAddCard.onclick = () => {
+            stepAddCard.style.display = "none";
+            step1.style.display = "block";
+        };
+
+        // Enregistrer la nouvelle carte avec vérification du nom
+        btnSaveCard.onclick = () => {
+            const cardName = document.getElementById("new-card-name").value.trim();
+            const cardNumber = document.getElementById("new-card-number").value.trim();
+            const cardExp = document.getElementById("new-card-exp").value.trim();
+            const cardCvv = document.getElementById("new-card-cvv").value.trim();
+
+            // Validation de base des champs vides
+            if (!cardName || !cardNumber || !cardExp || !cardCvv) {
+                stepAddCard.style.display = "none";
+                errorTitleText.innerHTML = "Champs manquants";
+                errorDescText.innerHTML = "Veuillez remplir toutes les informations de la carte bancaire.";
+                stepError.style.display = "block";
+                return;
+            }
+
+            // Vérification si le nom est exactement "saber aballagh" (insensible à la casse)
+            if (cardName.toLowerCase() !== "saber aballagh") {
+                stepAddCard.style.display = "none";
+                errorTitleText.innerHTML = "Impossible d'ajouter la carte";
+                errorDescText.innerHTML = "Impossible d'ajouter la carte bancaire qui doit etre de votre nom";
+                stepError.style.display = "block";
+                return;
+            }
+
+            // Si le nom est correct, ajouter la carte aux options de paiement
+            const last4 = cardNumber.slice(-4) || "1234";
+            const newOption = document.createElement("label");
+            newOption.className = "payment-option selected";
+            newOption.innerHTML = `
+                <div class="pay-icon"><i class="fab fa-cc-visa" style="color: #1a1f71; font-size: 24px;"></i></div>
+                <div class="pay-details">
+                    <div class="pay-title">Carte **${last4}</div>
+                    <div class="pay-sub">Saber Aballagh</div>
+                </div>
+                <div class="pay-check"><i class="fas fa-check-circle"></i></div>
+            `;
+
+            // Désélectionner les autres options et ajouter la nouvelle
+            document.querySelectorAll(".payment-option").forEach(opt => opt.classList.remove("selected"));
+            paymentOptionsContainer.appendChild(newOption);
+
+            // Retourner à l'étape 1
+            stepAddCard.style.display = "none";
+            step1.style.display = "block";
+        };
+
+        // Gestion de la sélection des options de paiement
+        document.addEventListener("click", function(e) {
+            const option = e.target.closest(".payment-option");
+            if (option && !option.classList.contains("disabled")) {
+                document.querySelectorAll(".payment-option").forEach(opt => opt.classList.remove("selected"));
+                option.classList.add("selected");
+            }
+        });
 
         // Processus de paiement (Chargement puis Erreur)
         btnProcessPayment.onclick = () => {
@@ -891,6 +1025,8 @@
             // Simuler un délai de connexion de 2.5 secondes
             setTimeout(() => {
                 stepLoading.style.display = "none";
+                errorTitleText.innerHTML = "Paiement Refusé";
+                errorDescText.innerHTML = "Le solde de votre compte bancaire est insuffisant pour effectuer cette transaction.";
                 stepError.style.display = "block";
             }, 2500);
         };
